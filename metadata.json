@@ -1,0 +1,6 @@
+{
+  "name": "Sistem Pemesanan & Monitoring Kendaraan Tambang Nikel",
+  "description": "Aplikasi manajemen dan pemesanan kendaraan tambang nikel dengan persetujuan berjenjang 2-level, monitoring BBM & service, dashboard analitik, dan export Excel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
