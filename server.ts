@@ -9,11 +9,11 @@ type AuthUser = { id: string; name: string; username: string; email: string; rol
 const app = express();
 const sessions = new Map<string, AuthUser>();
 
-const dbHost = process.env.DB_HOST || process.env.MYSQLHOST || '127.0.0.1';
-const dbPort = Number(process.env.DB_PORT || process.env.MYSQLPORT) || 3306;
-const dbUser = process.env.DB_USER || process.env.MYSQLUSER || 'root';
-const dbPassword = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '';
-const dbName = process.env.DB_NAME || process.env.MYSQLDATABASE || 'vehicle_booking';
+const dbHost = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || '127.0.0.1';
+const dbPort = Number(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT) || 3306;
+const dbUser = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || 'root';
+const dbPassword = process.env.DB_PASSWORD || process.env.MYSQL_ROOT_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '';
+const dbName = process.env.DB_NAME || process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE || 'vehicle_booking';
 
 const pool = mysql.createPool({
   host: dbHost,

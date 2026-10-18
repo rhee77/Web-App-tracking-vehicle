@@ -1,5 +1,7 @@
 import mysql from 'mysql2/promise';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   INITIAL_REGIONS,
   INITIAL_USERS,
@@ -12,11 +14,11 @@ import {
 } from '../src/data/mockData.ts';
 
 async function seed() {
-  const host = process.env.DB_HOST || process.env.MYSQLHOST || '127.0.0.1';
-  const port = Number(process.env.DB_PORT || process.env.MYSQLPORT) || 3306;
-  const user = process.env.DB_USER || process.env.MYSQLUSER || 'root';
-  const password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '';
-  const database = process.env.DB_NAME || process.env.MYSQLDATABASE || 'vehicle_booking';
+  const host = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || '127.0.0.1';
+  const port = Number(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT) || 3306;
+  const user = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || 'root';
+  const password = process.env.DB_PASSWORD || process.env.MYSQL_ROOT_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '';
+  const database = process.env.DB_NAME || process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE || 'vehicle_booking';
 
   console.log(`Connecting to MySQL database ${database} at ${host}:${port}...`);
   const connection = await mysql.createConnection({
@@ -28,7 +30,15 @@ async function seed() {
     multipleStatements: true
   });
 
-  console.log('Connected! Cleaning old records...');
+  console.log('Connected! Ensuring tables exist from database/schema.sql...');
+  const schemaPath = path.resolve(process.cwd(), 'database', 'schema.sql');
+  if (fs.existsSync(schemaPath)) {
+    const schemaSql = await fs.promises.readFile(schemaPath, 'utf-8');
+    await connection.query(schemaSql);
+    console.log('Schema verified/created successfully.');
+  }
+
+  console.log('Cleaning old records...');
   await connection.query('SET FOREIGN_KEY_CHECKS = 0');
   await connection.query('TRUNCATE TABLE booking_approvals');
   await connection.query('TRUNCATE TABLE bookings');
