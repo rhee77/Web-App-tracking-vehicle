@@ -1,20 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  Truck,
-  Users,
-  CalendarCheck2,
-  Clock,
-  Fuel,
-  TrendingUp,
-  AlertTriangle,
-  ArrowRight,
-  Filter,
-  CheckCircle2,
-  ChevronRight,
-  ShieldCheck,
-  Building2,
-  BarChart3
-} from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import type { Booking, Vehicle, Driver, Region, User } from '../types/index.ts';
 import { formatCurrencyIDR, formatDateID } from '../utils/rules.ts';
 
@@ -125,35 +110,32 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950/40 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xs relative">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-2">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Monitoring &amp; Fleet ERP Tambang Nikel</span>
+            <div className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 border border-slate-700/80 text-slate-300 text-[11px] font-medium mb-2">
+              <span>Sistem Manajemen Armada Tambang</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               Dashboard Operasional Armada
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
               Pemantauan terpusat untuk 1 Kantor Pusat, 1 Cabang, dan 6 Area Tambang Nikel dengan sistem persetujuan berjenjang 2-level.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => onNavigate('new_booking')}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-500/20 flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
+              className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-white font-medium text-xs sm:text-sm border border-slate-700 transition-colors"
             >
-              <Truck className="w-4 h-4" />
-              <span>+ Buat Pemesanan Baru</span>
+              Buat Pemesanan Baru
             </button>
             <button
               onClick={() => onNavigate('reports')}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs sm:text-sm flex items-center space-x-2 transition-colors"
+              className="px-3.5 py-2 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 border border-slate-700/80 font-medium text-xs sm:text-sm transition-colors"
             >
-              <BarChart3 className="w-4 h-4 text-emerald-400" />
-              <span>Export Laporan Excel</span>
+              Export Laporan Excel
             </button>
           </div>
         </div>
@@ -161,78 +143,64 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Approver Action Callout Banner (if applicable) */}
       {currentUser.role === 'approver' && myPendingApprovals.length > 0 && (
-        <div className="bg-gradient-to-r from-amber-900/60 to-amber-800/40 border border-amber-500/50 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
-          <div className="flex items-start space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 shrink-0 font-bold">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-amber-200 text-sm sm:text-base">
-                Perhatian: Terdapat {myPendingApprovals.length} Pemesanan Menunggu Persetujuan Anda!
-              </h3>
-              <p className="text-xs text-amber-300/80 mt-0.5">
-                Sebagai {currentUser.position}, persetujuan Anda diperlukan agar kendaraan dapat segera diterbitkan pool.
-              </p>
-            </div>
+        <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="font-semibold text-slate-200 text-sm">
+              Terdapat {myPendingApprovals.length} Pemesanan Menunggu Persetujuan Anda
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Sebagai {currentUser.position}, persetujuan Anda diperlukan untuk pemrosesan armada.
+            </p>
           </div>
           <button
             onClick={() => onNavigate('approvals')}
-            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 shrink-0 transition-colors"
+            className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium text-xs flex items-center justify-center space-x-1.5 shrink-0 transition-colors"
           >
-            <span>Tinjau Persetujuan Sekarang</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Tinjau Persetujuan</span>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
           </button>
         </div>
       )}
 
       {/* Metric Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: Total Armada */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-slate-700 transition-colors">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Total Armada Pool</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
-              <Truck className="w-4 h-4" />
-            </div>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs hover:border-slate-700/80 transition-colors">
+          <div className="text-xs font-medium text-slate-400 mb-2">
+            Total Armada Pool
           </div>
-          <div className="text-2xl font-extrabold text-white">
+          <div className="text-2xl font-bold text-white">
             {totalVehicles} <span className="text-xs font-normal text-slate-400">Unit</span>
           </div>
           <div className="mt-2 flex items-center space-x-2 text-[11px] text-slate-400">
-            <span className="text-emerald-400 font-semibold">{availableVehicles} Siap</span>
+            <span className="text-slate-300">{availableVehicles} Siap</span>
             <span>•</span>
-            <span className="text-amber-400 font-semibold">{inUseVehicles} Operasi</span>
+            <span className="text-slate-300">{inUseVehicles} Operasi</span>
             <span>•</span>
-            <span className="text-rose-400 font-semibold">{maintenanceVehicles} Servis</span>
+            <span className="text-slate-400">{maintenanceVehicles} Servis</span>
           </div>
         </div>
 
         {/* Card 2: Pemesanan Aktif */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-slate-700 transition-colors">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Pemesanan Disetujui</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs hover:border-slate-700/80 transition-colors">
+          <div className="text-xs font-medium text-slate-400 mb-2">
+            Pemesanan Disetujui
           </div>
-          <div className="text-2xl font-extrabold text-white">
+          <div className="text-2xl font-bold text-white">
             {activeBookings}{' '}
             <span className="text-xs font-normal text-slate-400">Jadwal Aktif</span>
           </div>
           <p className="mt-2 text-[11px] text-slate-400">
-            {completedBookings} pesanan telah selesai operasi
+            {completedBookings} pesanan selesai operasi
           </p>
         </div>
 
         {/* Card 3: Menunggu Approval */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-slate-700 transition-colors">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Menunggu Persetujuan</span>
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-              <Clock className="w-4 h-4" />
-            </div>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs hover:border-slate-700/80 transition-colors">
+          <div className="text-xs font-medium text-slate-400 mb-2">
+            Menunggu Persetujuan
           </div>
-          <div className="text-2xl font-extrabold text-amber-400">
+          <div className="text-2xl font-bold text-white">
             {pendingBookings}{' '}
             <span className="text-xs font-normal text-slate-400">Pengajuan</span>
           </div>
@@ -242,14 +210,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 4: Konsumsi BBM */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-slate-700 transition-colors">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Konsumsi BBM Tercatat</span>
-            <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
-              <Fuel className="w-4 h-4" />
-            </div>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs hover:border-slate-700/80 transition-colors">
+          <div className="text-xs font-medium text-slate-400 mb-2">
+            Konsumsi BBM Tercatat
           </div>
-          <div className="text-2xl font-extrabold text-white">
+          <div className="text-2xl font-bold text-white">
             {totalFuelLiters.toLocaleString('id-ID')}{' '}
             <span className="text-xs font-normal text-slate-400">Liter</span>
           </div>
@@ -262,44 +227,43 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart 1: Bar Chart of Monthly Vehicle Usage */}
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
-              <h2 className="font-bold text-white text-base flex items-center space-x-2">
-                <TrendingUp className="w-4 h-4 text-amber-400" />
-                <span>Grafik Tren Pemakaian Kendaraan Bulanan (2026)</span>
+              <h2 className="font-semibold text-white text-sm sm:text-base">
+                Tren Pemakaian Kendaraan Bulanan (2026)
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                Jumlah order pemesanan unit kendaraan tambang &amp; konsumsi solar
+                Jumlah order pemesanan armada &amp; konsumsi bahan bakar
               </p>
             </div>
             <div className="flex items-center space-x-2 text-xs">
-              <span className="flex items-center space-x-1.5 text-slate-300">
-                <span className="w-3 h-3 rounded-xs bg-amber-500 inline-block"></span>
+              <span className="flex items-center space-x-1.5 text-slate-400">
+                <span className="w-2.5 h-2.5 rounded-xs bg-slate-500 inline-block"></span>
                 <span>Order Pemesanan</span>
               </span>
             </div>
           </div>
 
           {/* Native SVG Bar Chart */}
-          <div className="h-64 w-full flex items-end justify-between gap-2 sm:gap-6 pt-6 pb-2 px-2 border-b border-slate-800">
+          <div className="h-60 w-full flex items-end justify-between gap-2 sm:gap-6 pt-4 pb-2 px-2 border-b border-slate-800">
             {monthlyData.map((d, i) => {
               const heightPercent = Math.round((d.count / maxMonthCount) * 100);
               return (
                 <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group">
-                  <div className="text-[11px] font-bold text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity mb-1.5">
+                  <div className="text-[11px] font-medium text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity mb-1.5">
                     {d.count} unit
                   </div>
-                  <div className="w-full max-w-[42px] bg-slate-800 rounded-t-lg overflow-hidden flex flex-col justify-end h-full">
+                  <div className="w-full max-w-[36px] bg-slate-800/80 rounded-t-md overflow-hidden flex flex-col justify-end h-full">
                     <div
                       style={{ height: `${heightPercent}%` }}
-                      className="w-full bg-gradient-to-t from-amber-600 via-amber-500 to-amber-400 rounded-t-lg transition-all duration-500 group-hover:brightness-125"
+                      className="w-full bg-slate-600 group-hover:bg-slate-500 rounded-t-md transition-all duration-300"
                     />
                   </div>
-                  <span className="mt-3 text-xs font-semibold text-slate-400 group-hover:text-white transition-colors">
+                  <span className="mt-2.5 text-xs text-slate-400 group-hover:text-slate-200 transition-colors">
                     {d.month}
                   </span>
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-[10px] text-slate-500">
                     {d.liters}L
                   </span>
                 </div>
@@ -307,19 +271,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             })}
           </div>
           <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 px-2">
-            <span>Rata-rata kenaikan utilitas: +18.4% per kuartal</span>
-            <span className="text-emerald-400 font-semibold">Tingkat Utilisasi Armada: 83.3%</span>
+            <span>Rata-rata utilitas: +18.4% per kuartal</span>
+            <span className="text-slate-300 font-medium">Tingkat Utilisasi Armada: 83.3%</span>
           </div>
         </div>
 
         {/* Chart 2: Category Ratio & Breakdown */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xs flex flex-col justify-between">
           <div>
-            <h2 className="font-bold text-white text-base flex items-center space-x-2 mb-1">
-              <Users className="w-4 h-4 text-blue-400" />
-              <span>Komposisi Jenis Kendaraan</span>
+            <h2 className="font-semibold text-white text-sm sm:text-base mb-1">
+              Komposisi Jenis Kendaraan
             </h2>
-            <p className="text-xs text-slate-400 mb-6">
+            <p className="text-xs text-slate-400 mb-5">
               Angkutan Orang vs Angkutan Barang
             </p>
 
@@ -327,16 +290,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-blue-400 flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                  <span className="font-medium text-slate-300 flex items-center space-x-1.5">
+                    <span className="w-2 h-2 rounded-full bg-slate-400"></span>
                     <span>Angkutan Orang (Hilux, HiAce, Triton)</span>
                   </span>
-                  <span className="font-bold text-white">{peoplePercent}%</span>
+                  <span className="font-semibold text-slate-200">{peoplePercent}%</span>
                 </div>
-                <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
                   <div
                     style={{ width: `${peoplePercent}%` }}
-                    className="h-full bg-blue-500 rounded-full"
+                    className="h-full bg-slate-500 rounded-full"
                   />
                 </div>
                 <p className="text-[11px] text-slate-400 mt-1">
@@ -346,16 +309,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               <div>
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-amber-400 flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  <span className="font-medium text-slate-300 flex items-center space-x-1.5">
+                    <span className="w-2 h-2 rounded-full bg-slate-500"></span>
                     <span>Angkutan Barang (Dump Truck, Hauler, Canter)</span>
                   </span>
-                  <span className="font-bold text-white">{goodsPercent}%</span>
+                  <span className="font-semibold text-slate-200">{goodsPercent}%</span>
                 </div>
-                <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
                   <div
                     style={{ width: `${goodsPercent}%` }}
-                    className="h-full bg-amber-500 rounded-full"
+                    className="h-full bg-slate-600 rounded-full"
                   />
                 </div>
                 <p className="text-[11px] text-slate-400 mt-1">
@@ -366,17 +329,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div className="mt-6 pt-4 border-t border-slate-800">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
               Status Kepemilikan Armada
             </h3>
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div className="p-2.5 rounded-lg bg-slate-850 border border-slate-800">
                 <span className="text-slate-400 text-[11px]">Milik Perusahaan</span>
-                <p className="font-bold text-white text-sm mt-0.5">8 Unit (66.7%)</p>
+                <p className="font-semibold text-white text-sm mt-0.5">8 Unit (66.7%)</p>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div className="p-2.5 rounded-lg bg-slate-850 border border-slate-800">
                 <span className="text-slate-400 text-[11px]">Sewa (Rental)</span>
-                <p className="font-bold text-amber-400 text-sm mt-0.5">4 Unit (33.3%)</p>
+                <p className="font-semibold text-slate-300 text-sm mt-0.5">4 Unit (33.3%)</p>
               </div>
             </div>
           </div>
@@ -386,35 +349,34 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Region Distribution & Recent Bookings */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Region Distribution */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
-          <h2 className="font-bold text-white text-base flex items-center space-x-2 mb-1">
-            <Building2 className="w-4 h-4 text-emerald-400" />
-            <span>Sebaran Pemakaian per Wilayah</span>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xs">
+          <h2 className="font-semibold text-white text-sm sm:text-base mb-1">
+            Sebaran Pemakaian per Wilayah
           </h2>
           <p className="text-xs text-slate-400 mb-4">
             Distribusi pergerakan di 1 Kantor Pusat, 1 Cabang, 6 Tambang
           </p>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {regionUsage.map((r, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/40 border border-slate-800 text-xs hover:border-slate-700 transition-colors"
+                className="flex items-center justify-between p-2 rounded-lg bg-slate-850 border border-slate-800 text-xs hover:border-slate-700 transition-colors"
               >
                 <div className="flex items-center space-x-2 truncate">
                   <span
-                    className={`w-2 h-2 rounded-full shrink-0 ${
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                       r.type === 'head_office'
-                        ? 'bg-blue-400'
+                        ? 'bg-slate-300'
                         : r.type === 'branch'
-                        ? 'bg-purple-400'
-                        : 'bg-amber-400'
+                        ? 'bg-slate-400'
+                        : 'bg-slate-500'
                     }`}
                   />
-                  <span className="font-medium text-slate-200 truncate">{r.name}</span>
+                  <span className="text-slate-300 truncate">{r.name}</span>
                 </div>
                 <div className="flex items-center space-x-2 shrink-0">
-                  <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-bold font-mono">
+                  <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[11px] font-mono border border-slate-700/80">
                     {r.count} trip
                   </span>
                 </div>
@@ -424,12 +386,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Right: Recent Bookings Table */}
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="font-bold text-white text-base flex items-center space-x-2">
-                <CalendarCheck2 className="w-4 h-4 text-amber-400" />
-                <span>Pemesanan Terbaru</span>
+              <h2 className="font-semibold text-white text-sm sm:text-base">
+                Pemesanan Terbaru
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 Monitoring status alur persetujuan berjenjang
@@ -437,16 +398,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
             <button
               onClick={() => onNavigate('bookings')}
-              className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center space-x-1"
+              className="text-xs text-slate-400 hover:text-slate-200 flex items-center space-x-1 transition-colors"
             >
               <span>Lihat Semua</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-800/60 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+              <thead className="bg-slate-850 text-slate-400 uppercase text-[10px] font-medium border-b border-slate-800">
                 <tr>
                   <th className="py-2.5 px-3">Kode &amp; Tanggal</th>
                   <th className="py-2.5 px-3">Kendaraan</th>
@@ -456,72 +417,72 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <th className="py-2.5 px-3 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-slate-300">
+              <tbody className="divide-y divide-slate-800/80 text-slate-300">
                 {bookings.slice(0, 5).map((b) => {
                   const v = vehicleMap.get(b.vehicleId);
                   const l1 = b.approvals.find((a) => a.level === 1);
                   const l2 = b.approvals.find((a) => a.level === 2);
 
                   return (
-                    <tr key={b.id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-3 font-medium">
-                        <div className="text-white font-mono font-semibold">{b.code}</div>
-                        <div className="text-[10px] text-slate-400">{formatDateID(b.createdAt)}</div>
+                    <tr key={b.id} className="hover:bg-slate-850/60 transition-colors">
+                      <td className="py-2.5 px-3 font-medium">
+                        <div className="text-slate-200 font-mono">{b.code}</div>
+                        <div className="text-[10px] text-slate-500">{formatDateID(b.createdAt)}</div>
                       </td>
-                      <td className="py-3 px-3">
-                        <div className="font-medium text-slate-200">{v?.name || '-'}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">{v?.plateNumber}</div>
+                      <td className="py-2.5 px-3">
+                        <div className="text-slate-200">{v?.name || '-'}</div>
+                        <div className="text-[10px] text-slate-500 font-mono">{v?.plateNumber}</div>
                       </td>
-                      <td className="py-3 px-3 max-w-[160px] truncate" title={b.destination}>
+                      <td className="py-2.5 px-3 max-w-[160px] truncate" title={b.destination}>
                         {b.destination}
                       </td>
-                      <td className="py-3 px-3">
+                      <td className="py-2.5 px-3">
                         <div className="flex items-center space-x-1.5">
                           <span
-                            className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                               l1?.status === 'approved'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-slate-800 text-slate-200 border border-slate-700'
                                 : l1?.status === 'rejected'
-                                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                                : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                ? 'bg-slate-850 text-slate-400 border border-slate-700'
+                                : 'bg-slate-800 text-slate-300 border border-slate-700'
                             }`}
                           >
                             L1: {l1?.status.toUpperCase()}
                           </span>
                           <span
-                            className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                               l2?.status === 'approved'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-slate-800 text-slate-200 border border-slate-700'
                                 : l2?.status === 'rejected'
-                                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                                ? 'bg-slate-850 text-slate-400 border border-slate-700'
                                 : l2?.status === 'pending'
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                : 'bg-slate-800 text-slate-400'
+                                ? 'bg-slate-800 text-slate-300 border border-slate-700'
+                                : 'bg-slate-850 text-slate-500'
                             }`}
                           >
                             L2: {l2?.status.toUpperCase()}
                           </span>
                         </div>
                       </td>
-                      <td className="py-3 px-3">
+                      <td className="py-2.5 px-3">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          className={`px-2 py-0.5 rounded text-[10px] font-medium ${
                             b.status === 'completed'
-                              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                              ? 'bg-slate-800 text-slate-300 border border-slate-700'
                               : b.status === 'approved'
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              ? 'bg-slate-800 text-slate-200 border border-slate-700'
                               : b.status === 'rejected'
-                              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                              ? 'bg-slate-850 text-slate-400 border border-slate-700'
+                              : 'bg-slate-800 text-slate-300 border border-slate-700'
                           }`}
                         >
                           {b.status.toUpperCase()}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-right">
+                      <td className="py-2.5 px-3 text-right">
                         <button
                           onClick={() => onViewBookingDetail(b)}
-                          className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition-colors"
+                          className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700/80 text-[11px] transition-colors"
                         >
                           Detail
                         </button>

@@ -1,17 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  FileSpreadsheet,
-  Download,
-  Calendar,
-  Filter,
-  CheckCircle,
-  FileText,
-  Truck,
-  Fuel,
-  TrendingUp,
-  MapPin,
-  Clock
-} from 'lucide-react';
+
 import type { Booking, Vehicle, Driver, Region } from '../types/index.ts';
 import { exportBookingsToExcel } from '../utils/excelExport.ts';
 import { formatDateTimeID, formatCurrencyIDR } from '../utils/rules.ts';
@@ -92,9 +80,8 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-            <FileSpreadsheet className="w-6 h-6 text-emerald-400" />
-            <span>Laporan Periodik Pemesanan &amp; Export Excel</span>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Laporan Periodik Pemesanan &amp; Export Excel
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
             Unduh rekapitulasi data pemesanan, konsumsi BBM, jarak tempuh, dan status persetujuan
@@ -104,40 +91,37 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
         <button
           onClick={handleExport}
           disabled={isExporting || filteredBookings.length === 0}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5 shrink-0"
+          className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-white font-medium text-xs sm:text-sm border border-slate-700 transition-colors shrink-0 disabled:opacity-50"
         >
-          <Download className="w-4 h-4" />
-          <span>{isExporting ? 'Memproses...' : 'Export ke Excel (.xlsx)'}</span>
+          {isExporting ? 'Memproses...' : 'Export ke Excel (.xlsx)'}
         </button>
       </div>
 
       {/* Success Notification */}
       {exportSuccessMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center space-x-3 animate-in fade-in">
-          <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="p-3.5 rounded-lg bg-slate-850 border border-slate-700 text-slate-200 text-xs">
           <div>
-            <span className="font-bold">Berhasil!</span> File spreadsheet Excel (.xlsx) telah di-generate dan otomatis diunduh ke komputer Anda dengan 3 lembar kerja (Data Pemesanan, Ringkasan, Master Armada).
+            <span className="font-semibold text-white">Berhasil!</span> File spreadsheet Excel (.xlsx) telah di-generate dan otomatis diunduh dengan 3 lembar kerja (Data Pemesanan, Ringkasan, Master Armada).
           </div>
         </div>
       )}
 
       {/* Filter Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-        <div className="flex items-center space-x-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-          <Filter className="w-4 h-4 text-amber-500" />
-          <span>Parameter Filter Laporan</span>
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs space-y-3.5">
+        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          Parameter Filter Laporan
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           {/* Status Filter */}
           <div>
-            <label className="block text-slate-400 font-semibold mb-1">Status Pemesanan</label>
+            <label className="block text-slate-400 text-[11px] mb-1">Status Pemesanan</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
             >
-              <option value="all">Semua Status (All)</option>
+              <option value="all">Semua Status</option>
               <option value="approved">Disetujui (Approved)</option>
               <option value="completed">Selesai (Completed)</option>
               <option value="pending">Menunggu Persetujuan</option>
@@ -147,11 +131,11 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
           {/* Region Filter */}
           <div>
-            <label className="block text-slate-400 font-semibold mb-1">Wilayah / Tambang</label>
+            <label className="block text-slate-400 text-[11px] mb-1">Wilayah / Tambang</label>
             <select
               value={regionFilter}
               onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
             >
               <option value="all">Semua Lokasi Tambang &amp; Kantor</option>
               {regions.map((r) => (
@@ -164,11 +148,11 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
           {/* Category Filter */}
           <div>
-            <label className="block text-slate-400 font-semibold mb-1">Kategori Kendaraan</label>
+            <label className="block text-slate-400 text-[11px] mb-1">Kategori Kendaraan</label>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
             >
               <option value="all">Semua Jenis Angkutan</option>
               <option value="people">Angkutan Orang (Personel &amp; Crew)</option>
@@ -178,13 +162,13 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
           {/* Period Preset */}
           <div>
-            <label className="block text-slate-400 font-semibold mb-1">Rentang Periode</label>
+            <label className="block text-slate-400 text-[11px] mb-1">Rentang Periode</label>
             <select
               value={periodPreset}
               onChange={(e) => setPeriodPreset(e.target.value as any)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
             >
-              <option value="all">Semua Periode Tercatat</option>
+              <option value="all">Semua Periode</option>
               <option value="this_month">Bulan Ini (Oktober 2026)</option>
               <option value="last_month">Bulan Lalu (September 2026)</option>
               <option value="quarter">Kuartal 3 &amp; 4 (2026)</option>
@@ -194,56 +178,56 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
       </div>
 
       {/* Summary KPI Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span className="text-[11px] text-slate-400 font-semibold">Total Dokumen Pemesanan</span>
-          <div className="text-2xl font-extrabold text-white mt-1">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-xs">
+          <span className="text-[11px] text-slate-400">Total Dokumen Pemesanan</span>
+          <div className="text-xl font-bold text-white mt-1">
             {totalCount} <span className="text-xs font-normal text-slate-400">Pemesanan</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            {approvedCount} disetujui/selesai • {rejectedCount} ditolak
+          <div className="text-[11px] text-slate-500 mt-1">
+            {approvedCount} disetujui • {rejectedCount} ditolak
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span className="text-[11px] text-slate-400 font-semibold">Total Akumulasi Jarak</span>
-          <div className="text-2xl font-extrabold text-white mt-1">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-xs">
+          <span className="text-[11px] text-slate-400">Total Akumulasi Jarak</span>
+          <div className="text-xl font-bold text-white mt-1">
             {totalDistance.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-400">KM</span>
           </div>
-          <div className="text-[11px] text-emerald-400 mt-1">
+          <div className="text-[11px] text-slate-500 mt-1">
             Berdasarkan input odometer pool
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span className="text-[11px] text-slate-400 font-semibold">Total Konsumsi Solar</span>
-          <div className="text-2xl font-extrabold text-white mt-1">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-xs">
+          <span className="text-[11px] text-slate-400">Total Konsumsi Solar</span>
+          <div className="text-xl font-bold text-white mt-1">
             {totalFuelLiters.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-400">Liter</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Solar / Pertamina Dex tambang
+          <div className="text-[11px] text-slate-500 mt-1">
+            Realisasi pengisian pool
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span className="text-[11px] text-slate-400 font-semibold">Total Biaya Bahan Bakar</span>
-          <div className="text-2xl font-extrabold text-amber-400 mt-1 truncate">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-xs">
+          <span className="text-[11px] text-slate-400">Total Biaya Bahan Bakar</span>
+          <div className="text-xl font-bold text-white mt-1">
             {formatCurrencyIDR(totalFuelCost)}
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Rata-rata Rp 15.000 / Liter
+          <div className="text-[11px] text-slate-500 mt-1">
+            Estimasi efisiensi operasional
           </div>
         </div>
       </div>
 
       {/* Filtered Data Preview Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-          <span className="font-bold text-white text-xs">
-            Preview Data yang Akan Di-Export ({filteredBookings.length} baris)
+      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xs">
+        <div className="p-3.5 border-b border-slate-800 flex items-center justify-between">
+          <span className="font-semibold text-white text-xs">
+            Preview Data ({filteredBookings.length} baris)
           </span>
           <span className="text-[11px] text-slate-400">
-            Format: Microsoft Excel OpenXML Spreadsheet (.xlsx)
+            Format: Microsoft Excel OpenXML (.xlsx)
           </span>
         </div>
 

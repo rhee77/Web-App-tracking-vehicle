@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, X, Gauge, Fuel, DollarSign } from 'lucide-react';
+import { X } from 'lucide-react';
 import type { Booking, Vehicle } from '../types/index.ts';
 import { formatCurrencyIDR } from '../utils/rules.ts';
 
@@ -42,45 +42,44 @@ export const CompleteBookingModal: React.FC<CompleteBookingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-5 shadow-xl relative">
         <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-            <h3 className="font-bold text-white text-base">
+          <div>
+            <h3 className="font-semibold text-white text-sm">
               Penyelesaian Pemesanan Kendaraan
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white"
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="mt-3 p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs text-slate-300">
+        <div className="mt-3 p-3 rounded-lg bg-slate-850/60 border border-slate-800 text-xs text-slate-400">
           <p>
-            Kode Booking: <span className="font-mono font-bold text-white">{booking.code}</span>
+            Kode Booking: <span className="font-mono font-medium text-white">{booking.code}</span>
           </p>
           <p className="mt-0.5">
-            Kendaraan: <span className="font-semibold text-amber-300">{vehicle?.name}</span> ({vehicle?.plateNumber})
+            Kendaraan: <span className="font-medium text-slate-200">{vehicle?.name}</span> ({vehicle?.plateNumber})
           </p>
           <p className="mt-0.5">
-            Odometer Awal: <span className="font-mono text-white">{initialOdo.toLocaleString('id-ID')} KM</span>
+            Odometer Awal: <span className="font-mono text-slate-300">{initialOdo.toLocaleString('id-ID')} KM</span>
           </p>
         </div>
 
         {errorMsg && (
-          <div className="mt-3 p-2.5 rounded-lg bg-rose-500/20 text-rose-300 text-xs">
+          <div className="mt-3 p-2.5 rounded-lg bg-slate-850 border border-slate-700 text-rose-300 text-xs">
             {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-3 text-xs">
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">
-              Odometer Akhir Saat Kembali ke Pool (KM) <span className="text-rose-400">*</span>
+            <label className="block text-slate-400 text-[11px] mb-1">
+              Odometer Akhir Saat Kembali ke Pool (KM) <span className="text-slate-500">*</span>
             </label>
             <input
               type="number"
@@ -88,15 +87,15 @@ export const CompleteBookingModal: React.FC<CompleteBookingModalProps> = ({
               value={endOdometer}
               onChange={(e) => setEndOdometer(Number(e.target.value))}
               required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-slate-500"
             />
-            <p className="text-[11px] text-emerald-400 mt-1">
-              Estimasi Jarak Tempuh: <span className="font-bold">{distance} KM</span>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Estimasi Jarak Tempuh: <span className="font-medium text-slate-200">{distance} KM</span>
             </p>
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">
+            <label className="block text-slate-400 text-[11px] mb-1">
               Pengisian BBM Tambahan (Liter Solar/Dex)
             </label>
             <input
@@ -106,12 +105,12 @@ export const CompleteBookingModal: React.FC<CompleteBookingModalProps> = ({
               value={fuelLiters}
               onChange={(e) => setFuelLiters(Number(e.target.value))}
               required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-slate-500"
             />
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">
+            <label className="block text-slate-400 text-[11px] mb-1">
               Total Biaya Bahan Bakar (IDR)
             </label>
             <input
@@ -121,21 +120,21 @@ export const CompleteBookingModal: React.FC<CompleteBookingModalProps> = ({
               value={fuelCost}
               onChange={(e) => setFuelCost(Number(e.target.value))}
               required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-slate-500"
             />
           </div>
 
-          <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-end space-x-3">
+          <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-end space-x-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+              className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-medium transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20"
+              className="px-4 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 text-xs font-medium shadow-sm transition-colors"
             >
               Simpan &amp; Tandai Selesai
             </button>

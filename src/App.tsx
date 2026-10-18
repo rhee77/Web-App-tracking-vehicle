@@ -34,19 +34,16 @@ import { ActivityDiagramView } from './components/ActivityDiagramView.tsx';
 import { ReadmeModalView } from './components/ReadmeModalView.tsx';
 import { BookingDetailModal } from './components/BookingDetailModal.tsx';
 import { CompleteBookingModal } from './components/CompleteBookingModal.tsx';
+import { LoginView } from './components/LoginView.tsx';
+import { api } from './utils/api.ts';
 
 export default function App() {
+  const [isDbConnected, setIsDbConnected] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   // Persistence with localStorage fallback
   const [users] = useState<User[]>(INITIAL_USERS);
-  const [currentUser, setCurrentUser] = useState<User>(() => {
-    const saved = localStorage.getItem('nikel_fleet_current_user');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {}
-    }
-    return INITIAL_USERS[0]; // Admin by default
-  });
+  const [currentUser, setCurrentUser] = useState<User>(INITIAL_USERS[0]);
 
   const [regions] = useState<Region[]>(INITIAL_REGIONS);
 
@@ -109,10 +106,29 @@ export default function App() {
   const [selectedBookingForDetail, setSelectedBookingForDetail] = useState<Booking | null>(null);
   const [selectedBookingForComplete, setSelectedBookingForComplete] = useState<Booking | null>(null);
 
-  // Sync to localStorage
+  // Initial fetch from MySQL Backend
   useEffect(() => {
-    localStorage.setItem('nikel_fleet_current_user', JSON.stringify(currentUser));
-  }, [currentUser]);
+    async function initDatabase() {
+      try {
+        if (!isAuthenticated) return;
+        const health = await api.checkHealth();
+        setIsDbConnected(health.connected);
+        if (health.connected) {
+          const bootstrap = await api.getBootstrap();
+          if (bootstrap) {
+            if (bootstrap.vehicles?.length) setVehicles(bootstrap.vehicles);
+            if (bootstrap.bookings?.length) setBookings(bootstrap.bookings);
+            if (bootstrap.fuelLogs?.length) setFuelLogs(bootstrap.fuelLogs);
+            if (bootstrap.serviceSchedules?.length) setServiceSchedules(bootstrap.serviceSchedules);
+            if (bootstrap.activityLogs?.length) setActivityLogs(bootstrap.activityLogs);
+          }
+        }
+      } catch (err) {
+        console.warn('MySQL init error, using local fallback:', err);
+      }
+    }
+    initDatabase();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem('nikel_fleet_bookings', JSON.stringify(bookings));
@@ -152,21 +168,13 @@ export default function App() {
       ipAddress: '192.168.10.45'
     };
     setActivityLogs((prev) => [newLog, ...prev]);
-  };
-
-  // Switch role handler
-  const handleSwitchUser = (newUser: User) => {
-    setCurrentUser(newUser);
-    logActivity(
-      'SWITCH_USER',
-      'auth',
-      `Beralih peran aktif ke akun ${newUser.name} (${newUser.role === 'admin' ? 'Admin' : `Approver Level ${newUser.approvalLevel}`})`
-    );
+    if (category === 'export') api.logExport(description).catch(() => {});
   };
 
   // Create booking
   const handleCreateBooking = (newBooking: Booking) => {
     setBookings((prev) => [newBooking, ...prev]);
+    api.createBooking(newBooking).catch(() => {});
     logActivity(
       'CREATE_BOOKING',
       'booking',
@@ -190,6 +198,11 @@ export default function App() {
       );
 
       setBookings((prev) => prev.map((b) => (b.id === bookingId ? updated : b)));
+      api.processApproval(
+        bookingId,
+        'approve',
+        note
+      ).catch(() => {});
 
       // If fully approved, mark vehicle as in_use
       if (updated.status === 'approved') {
@@ -229,6 +242,11 @@ export default function App() {
       );
 
       setBookings((prev) => prev.map((b) => (b.id === bookingId ? updated : b)));
+      api.processApproval(
+        bookingId,
+        'reject',
+        note
+      ).catch(() => {});
 
       logActivity(
         currentUser.approvalLevel === 1 ? 'REJECT_LEVEL_1' : 'REJECT_LEVEL_2',
@@ -246,6 +264,7 @@ export default function App() {
     setBookings((prev) =>
       prev.map((b) => (b.id === bookingId ? { ...b, status: 'cancelled' } : b))
     );
+    api.cancelBooking(bookingId).catch(() => {});
     logActivity('CANCEL_BOOKING', 'booking', `Membatalkan pemesanan kendaraan (ID: ${bookingId})`);
   };
 
@@ -272,6 +291,7 @@ export default function App() {
           : b
       )
     );
+    api.completeBooking(bookingId, endOdometer, fuelLiters, fuelCost, bkg.vehicleId).catch(() => {});
 
     // Update vehicle odometer and availability
     setVehicles((prev) =>
@@ -359,13 +379,16 @@ export default function App() {
     ? vehicles.find((v) => v.id === selectedBookingForComplete.vehicleId)
     : undefined;
 
+  if (!isAuthenticated) {
+    return <LoginView onLoggedIn={(user) => { setCurrentUser(user); setIsAuthenticated(true); }} />;
+  }
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-slate-700 selection:text-white">
       {/* Top Navigation */}
       <Navbar
         currentUser={currentUser}
-        users={users}
-        onSwitchUser={handleSwitchUser}
+        onLogout={() => { api.logout().finally(() => setIsAuthenticated(false)); }}
         bookings={bookings}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         onNavigate={(tab) => {
@@ -439,7 +462,7 @@ export default function App() {
               onApprove={handleApproveBooking}
               onReject={handleRejectBooking}
               onViewBookingDetail={(b) => setSelectedBookingForDetail(b)}
-              onSwitchUser={handleSwitchUser}
+              onSwitchUser={() => {}}
               allUsers={users}
             />
           )}

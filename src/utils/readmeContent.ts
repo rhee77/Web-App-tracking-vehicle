@@ -110,10 +110,9 @@ Sesuai skenario soal:
 
 ---
 
-## 5. Nilai Tambah (Instruction Bonus Points)
+## 5. Dokumentasi dan Audit
 
-- **a. Physical Data Model (PDM):** Tersedia tab interaktif **"Arsitektur & PDM"** yang menampilkan ERD visual lengkap, kamus data tabel (primary key, foreign key, index, tipe data), dan script SQL DDL.
-- **b. Activity Diagram:** Tersedia tab **"Activity Diagram"** dengan diagram swimlane interaktif (Admin -> Sistem -> Approver 1 -> Approver 2 -> Pool) dan visualisasi alur bertahap.
-- **c. Log Aplikasi Menyeluruh:** Setiap proses (Login, Create Booking, Approve L1, Approve L2, Reject, Selesai, Export Excel) tercatat di tabel audit trail dengan User, Role, Action, IP Address, dan Timestamp.
-- **d. UI/UX Profesional & Responsif:** Desain tema industri pertambangan nikel modern dengan palet warna slate-amber-emerald, tipografi terstruktur, badge status yang jelas, dialog konfirmasi aman, serta navigasi yang adaptif untuk desktop maupun perangkat mobile.
+- **Physical Data Model (PDM):** Menampilkan ERD, kamus data tabel, relasi, indeks, dan script SQL DDL.
+- **Activity Diagram:** Menampilkan alur permohonan, validasi, approval level 1 dan 2, hingga penyelesaian booking.
+- **Log Aktivitas:** Mencatat login, pemesanan, keputusan approval, penyelesaian, dan ekspor laporan.
 `;

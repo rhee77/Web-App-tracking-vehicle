@@ -1,16 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  X,
-  Truck,
-  UserCheck,
-  Calendar,
-  MapPin,
-  FileText,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  ShieldCheck
-} from 'lucide-react';
+import { X } from 'lucide-react';
 import type { Booking, Vehicle, Driver, Region, User } from '../types/index.ts';
 import { checkBookingConflicts, formatDateTimeID } from '../utils/rules.ts';
 
@@ -163,73 +152,64 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative my-8">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-2xl w-full p-5 shadow-xl relative my-8">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-              <Truck className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">
-                Buat Formulir Pemesanan Kendaraan
-              </h2>
-              <p className="text-xs text-slate-400">
-                Persetujuan berjenjang minimal 2 level (Atasan Langsung &amp; Kepala Pool)
-              </p>
-            </div>
+        <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
+          <div>
+            <h2 className="text-base font-semibold text-white">
+              Buat Formulir Pemesanan Kendaraan
+            </h2>
+            <p className="text-xs text-slate-400">
+              Persetujuan berjenjang minimal 2 level (Atasan Langsung &amp; Kepala Pool)
+            </p>
           </div>
           <button
             onClick={onClose}
             className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Error Alert */}
         {errorMsg && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
+          <div className="mt-3 p-3 rounded-lg bg-slate-850 border border-slate-700 text-rose-300 text-xs">
             <span>{errorMsg}</span>
           </div>
         )}
 
         {/* Real-time Conflict Warning */}
         {conflictResult.hasConflict && (
-          <div className="mt-4 p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 text-xs flex items-start space-x-2">
-            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold">Peringatan Jadwal Bentrok (Conflict):</span>{' '}
-              {conflictResult.message}
-            </div>
+          <div className="mt-3 p-3 rounded-lg bg-slate-850 border border-slate-700 text-slate-300 text-xs">
+            <span className="font-semibold text-white">Peringatan Jadwal Bentrok:</span>{' '}
+            {conflictResult.message}
           </div>
         )}
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="mt-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
           {/* Departemen & Wilayah */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Departemen Pemohon <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Departemen Pemohon <span className="text-slate-500">*</span>
               </label>
               <input
                 type="text"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Wilayah Operasional / Lokasi Tambang <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Wilayah Operasional / Tambang <span className="text-slate-500">*</span>
               </label>
               <select
                 value={regionId}
                 onChange={(e) => setRegionId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
               >
                 {regions.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -241,15 +221,15 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
           </div>
 
           {/* Armada & Driver Selection */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Pilih Kendaraan Armada <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Pilih Kendaraan Armada <span className="text-slate-500">*</span>
               </label>
               <select
                 value={vehicleId}
                 onChange={(e) => setVehicleId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
               >
                 {vehicles.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -259,19 +239,19 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
               </select>
               {selectedVehicle && (
                 <div className="mt-1 text-[11px] text-slate-400">
-                  Status: <span className="font-semibold text-slate-200 uppercase">{selectedVehicle.status}</span> • Odo: {selectedVehicle.odometer.toLocaleString('id-ID')} KM
+                  Status: <span className="font-medium text-slate-300 uppercase">{selectedVehicle.status}</span> • Odo: {selectedVehicle.odometer.toLocaleString('id-ID')} KM
                 </div>
               )}
             </div>
 
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Pilih Driver / Pengemudi <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Pilih Driver / Pengemudi <span className="text-slate-500">*</span>
               </label>
               <select
                 value={driverId}
                 onChange={(e) => setDriverId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
               >
                 {drivers.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -288,9 +268,8 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
           </div>
 
           {/* Schedule Range */}
-          <div className="p-3.5 rounded-xl bg-slate-800/50 border border-slate-700/60 space-y-3">
-            <div className="flex items-center space-x-2 text-amber-400 font-semibold">
-              <Calendar className="w-4 h-4" />
+          <div className="p-3 rounded-lg bg-slate-850/60 border border-slate-800 space-y-2.5">
+            <div className="text-slate-300 font-medium">
               <span>Rentang Waktu Pemakaian Kendaraan</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -304,14 +283,14 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     required
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500"
+                    className="flex-1 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
                   />
                   <input
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                     required
-                    className="w-24 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-amber-500"
+                    className="w-24 bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-slate-500"
                   />
                 </div>
               </div>
@@ -326,14 +305,14 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     required
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500"
+                    className="flex-1 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
                   />
                   <input
                     type="time"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                     required
-                    className="w-24 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-amber-500"
+                    className="w-24 bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-slate-500"
                   />
                 </div>
               </div>
@@ -343,8 +322,8 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
           {/* Destination & Purpose */}
           <div className="space-y-3">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Lokasi Tujuan Spesifik <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Lokasi Tujuan Spesifik <span className="text-slate-500">*</span>
               </label>
               <input
                 type="text"
@@ -352,13 +331,13 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-3 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-slate-500"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Keperluan Penggunaan Kendaraan <span className="text-rose-400">*</span>
+              <label className="block text-slate-400 text-[11px] mb-1">
+                Keperluan Penggunaan Kendaraan <span className="text-slate-500">*</span>
               </label>
               <textarea
                 rows={2}
@@ -366,27 +345,26 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-3 py-1.5 text-white placeholder-slate-500 focus:outline-none focus:border-slate-500"
               />
             </div>
           </div>
 
           {/* 2-Level Approvers Configuration */}
-          <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700 space-y-3">
-            <div className="flex items-center space-x-2 text-amber-400 font-semibold">
-              <ShieldCheck className="w-4 h-4" />
+          <div className="p-3 rounded-lg bg-slate-850/60 border border-slate-800 space-y-2.5">
+            <div className="text-slate-300 font-medium">
               <span>Penentuan Pihak yang Menyetujui (Minimal 2 Level)</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-300 text-[11px] font-semibold mb-1">
-                  Approver Level 1 (Atasan Langsung) <span className="text-rose-400">*</span>
+                <label className="block text-slate-400 text-[11px] mb-1">
+                  Approver Level 1 (Atasan Langsung) <span className="text-slate-500">*</span>
                 </label>
                 <select
                   value={approverL1Id}
                   onChange={(e) => setApproverL1Id(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
                 >
                   {approvers.map((a) => (
                     <option key={a.id} value={a.id}>
@@ -394,19 +372,19 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                     </option>
                   ))}
                 </select>
-                <p className="text-[10px] text-slate-400 mt-1">
-                  Memvalidasi relevansi tugas &amp; urgensi operasional lapangan.
+                <p className="text-[10px] text-slate-500 mt-1">
+                  Memvalidasi relevansi tugas &amp; urgensi operasional.
                 </p>
               </div>
 
               <div>
-                <label className="block text-slate-300 text-[11px] font-semibold mb-1">
-                  Approver Level 2 (Kepala Pool / Logistik) <span className="text-rose-400">*</span>
+                <label className="block text-slate-400 text-[11px] mb-1">
+                  Approver Level 2 (Kepala Pool / Logistik) <span className="text-slate-500">*</span>
                 </label>
                 <select
                   value={approverL2Id}
                   onChange={(e) => setApproverL2Id(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-slate-500"
                 >
                   {approvers.map((a) => (
                     <option key={a.id} value={a.id}>
@@ -414,29 +392,29 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
                     </option>
                   ))}
                 </select>
-                <p className="text-[10px] text-slate-400 mt-1">
-                  Memvalidasi alokasi unit pool, kesiapan BBM, dan driver.
+                <p className="text-[10px] text-slate-500 mt-1">
+                  Memvalidasi alokasi unit pool, BBM, dan ketersediaan driver.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Form Actions */}
-          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end space-x-2.5 pt-3 border-t border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition-colors"
+              className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 font-medium transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={conflictResult.hasConflict}
-              className={`px-5 py-2 rounded-xl font-bold transition-all shadow-md ${
+              className={`px-4 py-1.5 rounded-lg font-medium transition-all text-xs ${
                 conflictResult.hasConflict
-                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                  : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20'
+                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                  : 'bg-white hover:bg-slate-100 text-slate-900 shadow-sm'
               }`}
             >
               Kirim Pengajuan Pemesanan

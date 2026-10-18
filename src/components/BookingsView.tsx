@@ -1,18 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  Search,
-  Filter,
-  Plus,
-  Calendar,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Car,
-  UserCheck,
-  ChevronRight,
-  FileSpreadsheet,
-  AlertCircle
-} from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { Booking, Vehicle, Driver, Region, User } from '../types/index.ts';
 import { formatDateTimeID, formatCurrencyIDR } from '../utils/rules.ts';
 
@@ -78,7 +65,7 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             Daftar Pemesanan Kendaraan
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
@@ -88,34 +75,33 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
 
         <button
           onClick={onNewBookingClick}
-          className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2 transition-all shrink-0"
+          className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-white font-medium text-xs sm:text-sm border border-slate-700 transition-colors shrink-0"
         >
-          <Plus className="w-4 h-4" />
-          <span>+ Buat Pemesanan Baru</span>
+          Buat Pemesanan Baru
         </button>
       </div>
 
       {/* Filter Chips & Search Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
-        <div className="flex flex-col md:flex-row gap-3">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-3">
+        <div className="flex flex-col md:flex-row gap-2.5">
           {/* Search Input */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari kode booking, armada, no. polisi, driver, atau tujuan..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg pl-9 pr-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
             />
           </div>
 
           {/* Region Select */}
-          <div className="w-full md:w-60">
+          <div className="w-full md:w-56">
             <select
               value={regionFilter}
               onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-slate-500"
             >
               <option value="all">Semua Wilayah Operasional</option>
               {regions.map((r) => (
@@ -128,23 +114,23 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
         </div>
 
         {/* Status Chips */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-xs">
-          <span className="text-[11px] font-semibold text-slate-400 shrink-0">Status:</span>
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5 text-xs">
+          <span className="text-[11px] text-slate-400 shrink-0 mr-1">Status:</span>
           {[
             { id: 'all', label: 'Semua Status' },
             { id: 'pending', label: 'Menunggu Approval' },
-            { id: 'approved', label: 'Disetujui (Approved)' },
-            { id: 'completed', label: 'Selesai (Completed)' },
-            { id: 'rejected', label: 'Ditolak (Rejected)' },
+            { id: 'approved', label: 'Disetujui' },
+            { id: 'completed', label: 'Selesai' },
+            { id: 'rejected', label: 'Ditolak' },
             { id: 'cancelled', label: 'Dibatalkan' }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setStatusFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs whitespace-nowrap transition-colors ${
                 statusFilter === tab.id
-                  ? 'bg-amber-500 text-slate-950 font-bold'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                  ? 'bg-slate-700 text-white font-medium border border-slate-600'
+                  : 'bg-slate-850 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800'
               }`}
             >
               {tab.label}
@@ -154,26 +140,25 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
       </div>
 
       {/* Bookings Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+            <thead className="bg-slate-850 text-slate-400 uppercase text-[10px] font-medium border-b border-slate-800">
               <tr>
-                <th className="py-3 px-4">Kode &amp; Pemohon</th>
-                <th className="py-3 px-4">Kendaraan &amp; Driver</th>
-                <th className="py-3 px-4">Jadwal &amp; Lokasi</th>
-                <th className="py-3 px-4">Tujuan / Keperluan</th>
-                <th className="py-3 px-4">Alur Approval</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Aksi</th>
+                <th className="py-2.5 px-3.5">Kode &amp; Pemohon</th>
+                <th className="py-2.5 px-3.5">Kendaraan &amp; Driver</th>
+                <th className="py-2.5 px-3.5">Jadwal &amp; Lokasi</th>
+                <th className="py-2.5 px-3.5">Tujuan / Keperluan</th>
+                <th className="py-2.5 px-3.5">Alur Approval</th>
+                <th className="py-2.5 px-3.5">Status</th>
+                <th className="py-2.5 px-3.5 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-300">
+            <tbody className="divide-y divide-slate-800/80 text-slate-300">
               {filteredBookings.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <AlertCircle className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                    <p className="text-sm font-semibold">Tidak ada pemesanan yang cocok</p>
+                    <p className="text-sm font-medium">Tidak ada pemesanan yang cocok</p>
                     <p className="text-xs text-slate-500 mt-1">
                       Coba sesuaikan kata kunci pencarian atau filter status.
                     </p>
@@ -188,60 +173,53 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
                   const l2 = b.approvals.find((a) => a.level === 2);
 
                   return (
-                    <tr key={b.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={b.id} className="hover:bg-slate-850/60 transition-colors">
                       {/* Code & Requester */}
-                      <td className="py-3.5 px-4 font-medium">
-                        <div className="text-white font-mono font-bold text-xs">
+                      <td className="py-3 px-3.5 font-medium">
+                        <div className="text-slate-200 font-mono text-xs">
                           {b.code}
                         </div>
-                        <div className="text-[11px] text-amber-400/90 font-medium mt-0.5">
+                        <div className="text-[11px] text-slate-400 mt-0.5">
                           {b.department}
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[10px] text-slate-500">
                           {b.createdByName}
                         </div>
                       </td>
 
                       {/* Vehicle & Driver */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-semibold text-slate-100 flex items-center space-x-1.5">
-                          <span>{v?.name || '-'}</span>
+                      <td className="py-3 px-3.5">
+                        <div className="font-medium text-slate-200">
+                          {v?.name || '-'}
                         </div>
                         <div className="flex items-center space-x-1.5 mt-0.5">
-                          <span className="font-mono text-[10px] bg-slate-800 px-1.5 py-0.2 rounded text-slate-300 border border-slate-700">
+                          <span className="font-mono text-[10px] bg-slate-800 px-1.5 py-0.2 rounded text-slate-300 border border-slate-700/80">
                             {v?.plateNumber}
                           </span>
-                          <span
-                            className={`text-[9px] font-bold px-1 py-0.2 rounded uppercase ${
-                              v?.ownership === 'owned'
-                                ? 'bg-blue-900/40 text-blue-300'
-                                : 'bg-purple-900/40 text-purple-300'
-                            }`}
-                          >
+                          <span className="text-[9px] px-1 py-0.2 rounded uppercase bg-slate-850 text-slate-400 border border-slate-800">
                             {v?.ownership === 'owned' ? 'Milik' : 'Sewa'}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-400 mt-1 flex items-center space-x-1">
-                          <UserCheck className="w-3 h-3 text-slate-500" />
-                          <span>Driver: {d?.name || '-'}</span>
+                        <div className="text-[10px] text-slate-500 mt-1">
+                          Driver: {d?.name || '-'}
                         </div>
                       </td>
 
                       {/* Schedule & Region */}
-                      <td className="py-3.5 px-4">
-                        <div className="text-slate-200 text-[11px] font-medium">
+                      <td className="py-3 px-3.5">
+                        <div className="text-slate-300 text-[11px]">
                           {formatDateTimeID(b.startAt)}
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[10px] text-slate-500">
                           s/d {formatDateTimeID(b.endAt)}
                         </div>
-                        <div className="text-[10px] text-emerald-400 mt-0.5 font-medium">
+                        <div className="text-[10px] text-slate-400 mt-0.5">
                           {r?.name}
                         </div>
                       </td>
 
                       {/* Destination / Purpose */}
-                      <td className="py-3.5 px-4 max-w-[200px]">
+                      <td className="py-3 px-3.5 max-w-[200px]">
                         <div className="font-medium text-slate-200 truncate" title={b.destination}>
                           {b.destination}
                         </div>
@@ -251,44 +229,44 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
                       </td>
 
                       {/* Approval Status Badges */}
-                      <td className="py-3.5 px-4">
-                        <div className="space-y-1.5">
+                      <td className="py-3 px-3.5">
+                        <div className="space-y-1 text-[10px]">
                           {/* Level 1 */}
-                          <div className="flex items-center space-x-1.5 text-[10px]">
+                          <div className="flex items-center space-x-1.5">
                             <span className="text-slate-400 w-5">L1:</span>
                             <span
-                              className={`px-1.5 py-0.2 rounded font-bold ${
+                              className={`px-1.5 py-0.2 rounded font-medium ${
                                 l1?.status === 'approved'
-                                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                  ? 'bg-slate-800 text-slate-200 border border-slate-700'
                                   : l1?.status === 'rejected'
-                                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                                  : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                  ? 'bg-slate-850 text-slate-400 border border-slate-700'
+                                  : 'bg-slate-800 text-slate-300 border border-slate-700'
                               }`}
                             >
                               {l1?.status.toUpperCase()}
                             </span>
-                            <span className="text-[10px] text-slate-400 truncate max-w-[90px]">
+                            <span className="text-slate-500 truncate max-w-[80px]">
                               {l1?.approverName.split(' ')[0]}
                             </span>
                           </div>
 
                           {/* Level 2 */}
-                          <div className="flex items-center space-x-1.5 text-[10px]">
+                          <div className="flex items-center space-x-1.5">
                             <span className="text-slate-400 w-5">L2:</span>
                             <span
-                              className={`px-1.5 py-0.2 rounded font-bold ${
+                              className={`px-1.5 py-0.2 rounded font-medium ${
                                 l2?.status === 'approved'
-                                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                  ? 'bg-slate-800 text-slate-200 border border-slate-700'
                                   : l2?.status === 'rejected'
-                                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                                  ? 'bg-slate-850 text-slate-400 border border-slate-700'
                                   : l2?.status === 'pending'
-                                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                  : 'bg-slate-800 text-slate-400 border border-slate-700'
+                                  ? 'bg-slate-800 text-slate-300 border border-slate-700'
+                                  : 'bg-slate-850 text-slate-500'
                               }`}
                             >
                               {l2?.status.toUpperCase()}
                             </span>
-                            <span className="text-[10px] text-slate-400 truncate max-w-[90px]">
+                            <span className="text-slate-500 truncate max-w-[80px]">
                               {l2?.approverName.split(' ')[0]}
                             </span>
                           </div>
@@ -296,18 +274,18 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
                       </td>
 
                       {/* Overall Status */}
-                      <td className="py-3.5 px-4">
+                      <td className="py-3 px-3.5">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${
+                          className={`px-2 py-0.5 rounded text-[10px] font-medium uppercase ${
                             b.status === 'completed'
-                              ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                              ? 'bg-slate-800 text-slate-300 border border-slate-700'
                               : b.status === 'approved'
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              ? 'bg-slate-800 text-slate-200 border border-slate-700'
                               : b.status === 'rejected'
-                              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                              ? 'bg-slate-850 text-slate-400 border border-slate-700'
                               : b.status === 'cancelled'
-                              ? 'bg-slate-800 text-slate-400 border border-slate-700'
-                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                              ? 'bg-slate-850 text-slate-500 border border-slate-800'
+                              : 'bg-slate-800 text-slate-300 border border-slate-700'
                           }`}
                         >
                           {b.status}
@@ -315,30 +293,30 @@ export const BookingsView: React.FC<BookingsViewProps> = ({
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-3 px-3.5 text-right">
                         <div className="flex items-center justify-end space-x-1.5">
                           <button
                             onClick={() => onViewBookingDetail(b)}
-                            className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold transition-colors"
+                            className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700/80 text-[11px] transition-colors"
                           >
                             Detail
                           </button>
 
-                          {/* Selesai Button (for approved bookings to input end odo & BBM) */}
+                          {/* Selesai Button */}
                           {b.status === 'approved' && currentUser.role === 'admin' && (
                             <button
                               onClick={() => onOpenCompleteModal(b)}
-                              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold transition-colors shadow-xs"
+                              className="px-2.5 py-1 rounded bg-slate-700 hover:bg-slate-650 text-white text-[11px] font-medium border border-slate-600 transition-colors"
                             >
                               Selesai
                             </button>
                           )}
 
-                          {/* Cancel Button (if still pending) */}
+                          {/* Cancel Button */}
                           {b.status === 'pending' && currentUser.role === 'admin' && (
                             <button
                               onClick={() => onCancelBooking(b.id)}
-                              className="px-2 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[11px] font-semibold transition-colors"
+                              className="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 text-slate-400 hover:text-rose-300 border border-slate-700 text-[11px] transition-colors"
                             >
                               Batal
                             </button>

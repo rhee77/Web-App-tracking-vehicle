@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Database,
-  Copy,
-  Check,
-  Code2,
-  Table,
-  Layers,
-  KeyRound,
-  FileCode,
-  Network
-} from 'lucide-react';
+
 
 export const ArchitectureView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'diagram' | 'dictionary' | 'ddl' | 'mermaid'>('diagram');
@@ -254,95 +244,86 @@ CREATE TABLE activity_logs (
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-2">
-            <span>Instruction Tambahan (a)</span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-            <Database className="w-6 h-6 text-amber-500" />
-            <span>Physical Data Model (PDM) &amp; Arsitektur Basis Data</span>
+          <h1 className="text-xl font-bold text-white tracking-tight">
+            Physical Data Model (PDM) &amp; Arsitektur Basis Data
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Rancangan skema relasional, primary/foreign keys, indeks komposit overlap, dan integritas data pemesanan
           </p>
         </div>
 
         <button
           onClick={() => handleCopy(activeTab === 'ddl' ? sqlDDL : mermaidCode)}
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-colors self-start sm:self-auto"
+          className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-medium border border-slate-700 transition-colors self-start sm:self-auto"
         >
-          {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-          <span>{copied ? 'Tersalin ke Clipboard!' : 'Salin Kode Skema'}</span>
+          {copied ? 'Tersalin ke Clipboard!' : 'Salin Kode Skema'}
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 space-x-4 text-xs font-semibold">
+      <div className="flex border-b border-slate-800 space-x-4 text-xs font-medium">
         <button
           onClick={() => setActiveTab('diagram')}
-          className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
+          className={`pb-2.5 px-1 border-b-2 transition-colors ${
             activeTab === 'diagram'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-white text-white font-semibold'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Network className="w-4 h-4" />
-          <span>Diagram Relasi Visual (ERD)</span>
+          Diagram Relasi Visual (ERD)
         </button>
 
         <button
           onClick={() => setActiveTab('dictionary')}
-          className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
+          className={`pb-2.5 px-1 border-b-2 transition-colors ${
             activeTab === 'dictionary'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-white text-white font-semibold'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Table className="w-4 h-4" />
-          <span>Kamus Data Tabel (Data Dictionary)</span>
+          Kamus Data Tabel (Data Dictionary)
         </button>
 
         <button
           onClick={() => setActiveTab('ddl')}
-          className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
+          className={`pb-2.5 px-1 border-b-2 transition-colors ${
             activeTab === 'ddl'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-white text-white font-semibold'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Code2 className="w-4 h-4" />
-          <span>SQL DDL Schema (MySQL / MariaDB)</span>
+          SQL DDL Schema (MySQL / MariaDB)
         </button>
 
         <button
           onClick={() => setActiveTab('mermaid')}
-          className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
+          className={`pb-2.5 px-1 border-b-2 transition-colors ${
             activeTab === 'mermaid'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-white text-white font-semibold'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <FileCode className="w-4 h-4" />
-          <span>Format Mermaid.js</span>
+          Format Mermaid.js
         </button>
       </div>
 
       {/* Tab 1: Interactive Visual Diagram */}
       {activeTab === 'diagram' && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-6">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-5">
           <div className="text-xs text-slate-400">
-            Diagram entitas relasional menyorot hubungan <span className="font-semibold text-white">bookings</span> dengan <span className="font-semibold text-amber-400">booking_approvals (1:N 2-Level)</span>, <span className="font-semibold text-blue-400">vehicles</span>, <span className="font-semibold text-emerald-400">drivers</span>, dan <span className="font-semibold text-purple-400">regions</span>:
+            Diagram entitas relasional menyorot hubungan <span className="font-medium text-white">bookings</span> dengan <span className="font-medium text-slate-300">booking_approvals (1:N 2-Level)</span>, <span className="font-medium text-slate-300">vehicles</span>, <span className="font-medium text-slate-300">drivers</span>, dan <span className="font-medium text-slate-300">regions</span>:
           </div>
 
           {/* Graphical Node Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
             {/* Entity: BOOKINGS (Centerpiece) */}
-            <div className="md:col-span-3 bg-gradient-to-r from-amber-950/40 via-slate-850 to-slate-900 border-2 border-amber-500/60 rounded-2xl p-4 shadow-lg">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-amber-500/30">
-                <span className="font-mono font-bold text-amber-300 text-sm flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <div className="md:col-span-3 bg-slate-850/80 border border-slate-700/80 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700/80">
+                <span className="font-mono font-medium text-white text-xs flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-slate-400"></span>
                   <span>TABLE: bookings (Entitas Utama Pemesanan)</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono font-medium border border-slate-700">
                   InnoDB • Engine
                 </span>
               </div>
@@ -359,20 +340,20 @@ CREATE TABLE activity_logs (
                   <span className="text-emerald-400 font-bold font-mono">driver_id (FK)</span>
                   <p className="text-slate-400 text-[10px]">Relasi ke drivers.id</p>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
-                  <span className="text-purple-400 font-bold font-mono">created_by (FK)</span>
-                  <p className="text-slate-400 text-[10px]">Relasi ke users.id (Admin)</p>
+                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                  <span className="text-slate-200 font-medium font-mono">created_by (FK)</span>
+                  <p className="text-slate-500 text-[10px]">Relasi ke users.id (Admin)</p>
                 </div>
               </div>
             </div>
 
             {/* Entity: BOOKING_APPROVALS */}
-            <div className="bg-slate-850 border border-slate-700 rounded-2xl p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="font-mono font-bold text-emerald-350 text-xs">
+            <div className="bg-slate-850/80 border border-slate-800 rounded-xl p-3.5">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                <span className="font-mono font-medium text-slate-200 text-xs">
                   booking_approvals (2-Level)
                 </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400">1:N</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-850 text-slate-400 border border-slate-700">1:N</span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed mb-2">
                 Menyimpan tahapan persetujuan:
@@ -388,12 +369,12 @@ CREATE TABLE activity_logs (
             </div>
 
             {/* Entity: VEHICLES */}
-            <div className="bg-slate-850 border border-slate-700 rounded-2xl p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="font-mono font-bold text-blue-300 text-xs">
+            <div className="bg-slate-850/80 border border-slate-800 rounded-xl p-3.5">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                <span className="font-mono font-medium text-slate-200 text-xs">
                   vehicles (Armada Tambang)
                 </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400">1:N</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-850 text-slate-400 border border-slate-700">1:N</span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed mb-2">
                 Master 12 unit kendaraan tambang:
@@ -409,12 +390,12 @@ CREATE TABLE activity_logs (
             </div>
 
             {/* Entity: DRIVERS */}
-            <div className="bg-slate-850 border border-slate-700 rounded-2xl p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="font-mono font-bold text-emerald-300 text-xs">
+            <div className="bg-slate-850/80 border border-slate-800 rounded-xl p-3.5">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                <span className="font-mono font-medium text-slate-200 text-xs">
                   drivers (Pengemudi Pool)
                 </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400">1:N</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-850 text-slate-400 border border-slate-700">1:N</span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed mb-2">
                 Driver resmi berlisensi:
@@ -429,9 +410,9 @@ CREATE TABLE activity_logs (
             </div>
 
             {/* Entity: REGIONS */}
-            <div className="bg-slate-850 border border-slate-700 rounded-2xl p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="font-mono font-bold text-purple-300 text-xs">
+            <div className="bg-slate-850/80 border border-slate-800 rounded-xl p-3.5">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                <span className="font-mono font-medium text-slate-200 text-xs">
                   regions (1 HQ + 1 Cabang + 6 Tambang)
                 </span>
               </div>
@@ -443,9 +424,9 @@ CREATE TABLE activity_logs (
             </div>
 
             {/* Entity: FUEL_LOGS */}
-            <div className="bg-slate-850 border border-slate-700 rounded-2xl p-4">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="font-mono font-bold text-amber-400 text-xs">
+            <div className="bg-slate-850/80 border border-slate-800 rounded-xl p-3.5">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                <span className="font-mono font-medium text-slate-200 text-xs">
                   fuel_logs (Konsumsi BBM)
                 </span>
               </div>

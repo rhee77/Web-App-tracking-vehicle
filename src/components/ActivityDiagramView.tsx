@@ -1,17 +1,5 @@
 import React, { useState } from 'react';
-import {
-  GitBranch,
-  Play,
-  RotateCcw,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  ArrowRight,
-  ShieldCheck,
-  Truck,
-  Copy,
-  Check
-} from 'lucide-react';
+
 
 export const ActivityDiagramView: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -114,35 +102,30 @@ export const ActivityDiagramView: React.FC = () => {
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-2">
-            <span>Instruction Tambahan (b)</span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-            <GitBranch className="w-6 h-6 text-amber-500" />
-            <span>Activity Diagram Alur Pemesanan Kendaraan</span>
+          <h1 className="text-xl font-bold text-white tracking-tight">
+            Activity Diagram Alur Pemesanan Kendaraan
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Diagram aktivitas alur kerja terstruktur dari permohonan, validasi overlap, otorisasi berjenjang 2-level hingga penyelesaian BBM
           </p>
         </div>
 
         <button
           onClick={handleCopy}
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-colors self-start sm:self-auto"
+          className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-medium border border-slate-700 transition-colors self-start sm:self-auto"
         >
-          {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-          <span>{copied ? 'Tersalin!' : 'Salin Kode Diagram'}</span>
+          {copied ? 'Tersalin!' : 'Salin Kode Diagram'}
         </button>
       </div>
 
       {/* Interactive Step Simulator */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
           <div>
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
               Simulasi Tahap Interaktif
             </span>
-            <h2 className="text-base font-extrabold text-white mt-0.5">
+            <h2 className="text-sm font-semibold text-white mt-0.5">
               Tahap {currentStep + 1} dari {steps.length}: {steps[currentStep].title}
             </h2>
           </div>
@@ -151,41 +134,39 @@ export const ActivityDiagramView: React.FC = () => {
             <button
               onClick={() => setCurrentStep((prev) => Math.max(0, prev - 1))}
               disabled={currentStep === 0}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-xs font-semibold"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 disabled:opacity-40 text-slate-300 text-xs font-medium transition-colors"
             >
               Langkah Sebelumnya
             </button>
             <button
               onClick={() => setCurrentStep((prev) => Math.min(steps.length - 1, prev + 1))}
               disabled={currentStep === steps.length - 1}
-              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-slate-950 text-xs font-bold flex items-center space-x-1"
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 disabled:opacity-40 text-slate-900 text-xs font-medium shadow-sm transition-colors"
             >
-              <span>Langkah Berikutnya</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              Langkah Berikutnya
             </button>
             <button
               onClick={() => setCurrentStep(0)}
-              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
-              title="Reset Simulasi"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white text-xs font-medium transition-colors"
             >
-              <RotateCcw className="w-4 h-4" />
+              Reset
             </button>
           </div>
         </div>
 
         {/* Step Explanation Card */}
-        <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-start space-x-3">
-          <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+        <div className="p-3 rounded-lg bg-slate-850/60 border border-slate-800 flex items-start space-x-3">
+          <div className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 flex items-center justify-center font-semibold text-xs shrink-0 mt-0.5">
             {currentStep + 1}
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-bold text-white">{steps[currentStep].title}</span>
-              <span className="text-[10px] px-2 py-0.2 rounded bg-slate-700 text-amber-300 font-medium">
+              <span className="text-xs font-semibold text-white">{steps[currentStep].title}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-medium">
                 Pelaku: {steps[currentStep].actor}
               </span>
             </div>
-            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+            <p className="text-xs text-slate-300 mt-1 leading-relaxed">
               {steps[currentStep].desc}
             </p>
           </div>
@@ -194,23 +175,23 @@ export const ActivityDiagramView: React.FC = () => {
         {/* Swimlane Columns View */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 pt-2 text-xs">
           {/* Lane 1: Admin */}
-          <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-3 space-y-2">
-            <div className="font-bold text-blue-400 pb-2 border-b border-slate-700 text-center">
+          <div className="bg-slate-850/70 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div className="font-medium text-slate-300 pb-2 border-b border-slate-800 text-center text-xs">
               1. Admin / Pemohon
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 0
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Input Pemesanan &amp; Penugasan Driver
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 8
-                  ? 'bg-emerald-500/20 border-emerald-500 text-white font-bold ring-2 ring-emerald-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
@@ -219,32 +200,32 @@ export const ActivityDiagramView: React.FC = () => {
           </div>
 
           {/* Lane 2: Sistem */}
-          <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-3 space-y-2">
-            <div className="font-bold text-purple-400 pb-2 border-b border-slate-700 text-center">
+          <div className="bg-slate-850/70 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div className="font-medium text-slate-300 pb-2 border-b border-slate-800 text-center text-xs">
               2. Sistem (Engine)
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 1
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Validasi Jadwal Bentrok (Conflict Overlap)
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 2
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Simpan Booking &amp; Log Aktivitas
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 4 || currentStep === 6
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
@@ -253,23 +234,23 @@ export const ActivityDiagramView: React.FC = () => {
           </div>
 
           {/* Lane 3: Approver Level 1 */}
-          <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-3 space-y-2">
-            <div className="font-bold text-emerald-400 pb-2 border-b border-slate-700 text-center">
+          <div className="bg-slate-850/70 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div className="font-medium text-slate-300 pb-2 border-b border-slate-800 text-center text-xs">
               3. Approver L1 (Atasan)
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 3
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Tinjau Permohonan Lapangan
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 4
-                  ? 'bg-emerald-500/20 border-emerald-500 text-white font-bold ring-2 ring-emerald-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
@@ -278,23 +259,23 @@ export const ActivityDiagramView: React.FC = () => {
           </div>
 
           {/* Lane 4: Approver Level 2 */}
-          <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-3 space-y-2">
-            <div className="font-bold text-amber-400 pb-2 border-b border-slate-700 text-center">
+          <div className="bg-slate-850/70 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div className="font-medium text-slate-300 pb-2 border-b border-slate-800 text-center text-xs">
               4. Approver L2 (Pool)
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 5
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Tinjau Kesiapan Armada &amp; BBM
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 6
-                  ? 'bg-emerald-500/20 border-emerald-500 text-white font-bold ring-2 ring-emerald-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
@@ -303,23 +284,23 @@ export const ActivityDiagramView: React.FC = () => {
           </div>
 
           {/* Lane 5: Driver & Pool Lapangan */}
-          <div className="bg-slate-850 border border-slate-700/80 rounded-xl p-3 space-y-2">
-            <div className="font-bold text-teal-400 pb-2 border-b border-slate-700 text-center">
+          <div className="bg-slate-850/70 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div className="font-medium text-slate-300 pb-2 border-b border-slate-800 text-center text-xs">
               5. Pool &amp; Driver
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 7
-                  ? 'bg-amber-500/20 border-amber-500 text-white font-bold ring-2 ring-amber-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >
               Perjalanan Operasi di Pit / Tambang
             </div>
             <div
-              className={`p-2.5 rounded-lg border transition-all ${
+              className={`p-2.5 rounded-lg border transition-all text-[11px] ${
                 currentStep === 8
-                  ? 'bg-emerald-500/20 border-emerald-500 text-white font-bold ring-2 ring-emerald-500/40'
+                  ? 'bg-slate-800 border-slate-600 text-white font-medium ring-1 ring-slate-500'
                   : 'bg-slate-900 border-slate-800 text-slate-400'
               }`}
             >

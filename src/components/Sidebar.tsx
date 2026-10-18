@@ -10,9 +10,7 @@ import {
   Database,
   GitBranch,
   BookOpen,
-  X,
-  Building2,
-  Truck
+  X
 } from 'lucide-react';
 import type { User, Booking } from '../types/index.ts';
 
@@ -76,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Persetujuan Saya',
       icon: FileCheck2,
       badge: pendingApprovalsCount > 0 ? `${pendingApprovalsCount}` : null,
-      badgeColor: 'bg-amber-500 text-slate-950 font-bold'
+      badgeColor: 'bg-slate-800 text-slate-200 border border-slate-700 font-medium'
     },
     {
       id: 'fleet_monitoring',
@@ -89,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Laporan & Export Excel',
       icon: FileSpreadsheet,
       badge: 'XLSX',
-      badgeColor: 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/30'
+      badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700'
     },
     {
       id: 'activity_logs',
@@ -105,19 +103,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'pdm',
       label: 'Physical Data Model (PDM)',
       icon: Database,
-      badge: 'Bonus a'
+      badge: null
     },
     {
       id: 'activity_diagram',
       label: 'Activity Diagram Alur',
       icon: GitBranch,
-      badge: 'Bonus b'
+      badge: null
     },
     {
       id: 'readme',
       label: 'Panduan & README.md',
       icon: BookOpen,
-      badge: 'Soal g'
+      badge: null
     }
   ];
 
@@ -125,9 +123,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <div className="flex flex-col h-full bg-slate-900 border-r border-slate-800 text-slate-300">
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-slate-800">
-        <div className="flex items-center space-x-2">
-          <Truck className="w-5 h-5 text-amber-500" />
-          <span className="font-bold text-white text-sm">Sekawan Fleet</span>
+        <div>
+          <span className="font-semibold text-white text-sm">Sekawan Fleet</span>
         </div>
         <button
           onClick={onCloseMobile}
@@ -141,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Navigation List */}
       <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         <div className="px-3 mb-2">
-          <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          <p className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
             Menu Utama
           </p>
         </div>
@@ -150,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           if (item.type === 'divider') {
             return (
               <div key={index} className="pt-4 pb-1 px-3">
-                <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                <p className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
                   {item.label}
                 </p>
               </div>
@@ -167,21 +164,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onNavigate(item.id!);
                 onCloseMobile();
               }}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
                 isActive
-                  ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
+                  ? 'bg-slate-800 text-white font-medium border border-slate-700/80 shadow-xs'
                   : item.highlight
-                  ? 'bg-blue-600/15 border border-blue-500/30 text-blue-300 hover:bg-blue-600/25'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
+                  ? 'bg-slate-850 border border-slate-700/60 text-slate-200 hover:bg-slate-800'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
             >
-              <div className="flex items-center space-x-3 truncate">
+              <div className="flex items-center space-x-2.5 truncate">
                 <Icon
                   className={`w-4 h-4 shrink-0 ${
                     isActive
-                      ? 'text-slate-950'
+                      ? 'text-slate-200'
                       : item.highlight
-                      ? 'text-blue-400'
+                      ? 'text-slate-300'
                       : 'text-slate-400'
                   }`}
                 />
@@ -189,11 +186,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               {item.badge && (
                 <span
-                  className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                  className={`ml-2 px-1.5 py-0.5 rounded text-[10px] ${
                     item.badgeColor ||
                     (isActive
-                      ? 'bg-slate-950/20 text-slate-950'
-                      : 'bg-slate-800 text-slate-300 border border-slate-700')
+                      ? 'bg-slate-700 text-slate-200'
+                      : 'bg-slate-800 text-slate-400 border border-slate-700/80')
                   }`}
                 >
                   {item.badge}
@@ -205,9 +202,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Operational Region Info Footer */}
-      <div className="p-3 m-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-[11px]">
-        <div className="flex items-center space-x-2 text-amber-400 font-semibold mb-1">
-          <Building2 className="w-3.5 h-3.5" />
+      <div className="p-3 m-3 rounded-lg bg-slate-850/60 border border-slate-800 text-[11px]">
+        <div className="text-slate-300 font-medium mb-1">
           <span>8 Wilayah Operasional</span>
         </div>
         <p className="text-slate-400 text-[10px] leading-relaxed">

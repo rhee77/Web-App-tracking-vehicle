@@ -1,19 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import {
-  FileCheck2,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Lock,
-  ArrowRight,
-  Truck,
-  MapPin,
-  Calendar,
-  AlertCircle,
-  MessageSquare,
-  ShieldAlert,
-  UserCheck
-} from 'lucide-react';
 import type { Booking, Vehicle, Driver, Region, User } from '../types/index.ts';
 import { formatDateTimeID } from '../utils/rules.ts';
 
@@ -129,9 +114,8 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-            <FileCheck2 className="w-6 h-6 text-amber-500" />
-            <span>Persetujuan Pemesanan Kendaraan</span>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Persetujuan Pemesanan Kendaraan
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
             Otorisasi berjenjang 2-level: Level 1 (Atasan Langsung) &amp; Level 2 (Pool &amp; Logistik)
@@ -139,15 +123,15 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
         </div>
 
         {/* Quick Role Switch Buttons for Testing */}
-        <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+        <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 p-1 rounded-lg">
           <span className="text-[11px] text-slate-400 px-2 font-medium">Beralih Akun:</span>
           {approver1User && (
             <button
               onClick={() => onSwitchUser(approver1User)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 currentUser.id === approver1User.id
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-slate-800 text-slate-300 hover:text-white'
+                  ? 'bg-slate-700 text-white border border-slate-600'
+                  : 'bg-slate-800 text-slate-300 hover:text-white border border-transparent'
               }`}
             >
               Approver L1
@@ -156,10 +140,10 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
           {approver2User && (
             <button
               onClick={() => onSwitchUser(approver2User)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 currentUser.id === approver2User.id
-                  ? 'bg-purple-600 text-white shadow-xs'
-                  : 'bg-slate-800 text-slate-300 hover:text-white'
+                  ? 'bg-slate-700 text-white border border-slate-600'
+                  : 'bg-slate-800 text-slate-300 hover:text-white border border-transparent'
               }`}
             >
               Approver L2
@@ -170,53 +154,54 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
 
       {/* Role Alert for Admin */}
       {currentUser.role === 'admin' && (
-        <div className="p-4 rounded-xl bg-blue-900/20 border border-blue-500/30 text-blue-200 text-xs flex items-start space-x-3">
-          <AlertCircle className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+        <div className="p-3.5 rounded-lg bg-slate-850 border border-slate-700/80 text-slate-300 text-xs">
           <div className="leading-relaxed">
-            <span className="font-bold">Info Mode Admin:</span> Saat ini Anda masuk sebagai{' '}
-            <span className="font-semibold underline">Admin Fleet ({currentUser.name})</span>. Anda dapat memonitor seluruh pengajuan. Untuk mencoba mengeksekusi persetujuan berjenjang (Setujui/Tolak), silakan klik tombol{' '}
+            <span className="font-semibold text-white">Mode Admin:</span> Saat ini Anda masuk sebagai{' '}
+            <span className="font-medium text-slate-200">{currentUser.name}</span>. Untuk menguji aksi persetujuan (Setujui / Tolak), silakan beralih ke{' '}
             <button
               onClick={() => approver1User && onSwitchUser(approver1User)}
-              className="font-bold underline text-emerald-300 hover:text-emerald-200"
+              className="font-medium underline text-slate-200 hover:text-white"
             >
               Approver L1
             </button>{' '}
             atau{' '}
             <button
               onClick={() => approver2User && onSwitchUser(approver2User)}
-              className="font-bold underline text-purple-300 hover:text-purple-200"
+              className="font-medium underline text-slate-200 hover:text-white"
             >
               Approver L2
-            </button>{' '}
-            di atas.
+            </button>.
           </div>
         </div>
       )}
 
       {/* Tab Switcher */}
-      <div className="flex border-b border-slate-800 space-x-4 text-xs font-semibold">
+      <div className="flex border-b border-slate-800 space-x-4 text-xs">
         <button
           onClick={() => setActiveTab('pending')}
           className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
             activeTab === 'pending'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-slate-300 text-white font-medium'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <span>Perlu Keputusan ({pendingApprovals.length})</span>
-          {pendingApprovals.length > 0 && (
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-          )}
+          <span>Perlu Keputusan</span>
+          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 border border-slate-700 text-[10px]">
+            {pendingApprovals.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('history')}
           className={`pb-3 px-1 border-b-2 transition-colors flex items-center space-x-2 ${
             activeTab === 'history'
-              ? 'border-amber-500 text-amber-400'
+              ? 'border-slate-300 text-white font-medium'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <span>Riwayat Keputusan ({historyApprovals.length})</span>
+          <span>Riwayat Keputusan</span>
+          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700/80 text-[10px]">
+            {historyApprovals.length}
+          </span>
         </button>
       </div>
 
@@ -225,7 +210,6 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
         <div className="space-y-4">
           {pendingApprovals.length === 0 && lockedApprovals.length === 0 ? (
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center">
-              <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
               <h3 className="text-base font-bold text-white">
                 Tidak Ada Permintaan Persetujuan Tertunda
               </h3>
@@ -249,75 +233,72 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
                 return (
                   <div
                     key={b.id}
-                    className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all space-y-4"
+                    className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xs hover:border-slate-700/80 transition-colors space-y-3.5"
                   >
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
-                      <div className="flex items-center space-x-3">
-                        <span className="font-mono text-sm font-bold text-amber-400">
+                      <div className="flex items-center space-x-2.5">
+                        <span className="font-mono text-xs font-semibold text-slate-200">
                           {b.code}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                          PENDING APPROVAL
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                          Menunggu Persetujuan
                         </span>
-                        <span className="text-xs text-slate-400 font-medium">
+                        <span className="text-xs text-slate-400">
                           {b.department}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-400">
+                      <div className="text-[11px] text-slate-400">
                         Diajukan: {formatDateTimeID(b.createdAt)}
                       </div>
                     </div>
 
                     {/* Details Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
                       {/* Column 1: Armada */}
                       <div className="space-y-1">
-                        <span className="text-slate-400 font-semibold text-[11px]">Kendaraan &amp; Driver:</span>
-                        <p className="text-white font-bold">{v?.name || '-'}</p>
-                        <p className="text-slate-300 font-mono text-[11px]">
+                        <span className="text-slate-400 text-[11px]">Kendaraan &amp; Driver:</span>
+                        <p className="text-white font-medium">{v?.name || '-'}</p>
+                        <p className="text-slate-400 font-mono text-[11px]">
                           {v?.plateNumber} • {v?.category === 'people' ? 'Angkutan Orang' : 'Angkutan Barang'}
                         </p>
-                        <p className="text-slate-400 flex items-center space-x-1 mt-1">
-                          <UserCheck className="w-3.5 h-3.5 text-slate-400" />
+                        <p className="text-slate-400 mt-1 text-[11px]">
                           <span>Driver: {d?.name} ({d?.phone})</span>
                         </p>
                       </div>
 
                       {/* Column 2: Jadwal & Lokasi */}
                       <div className="space-y-1">
-                        <span className="text-slate-400 font-semibold text-[11px]">Jadwal &amp; Wilayah:</span>
-                        <p className="text-slate-200 flex items-center space-x-1">
-                          <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                        <span className="text-slate-400 text-[11px]">Jadwal &amp; Wilayah:</span>
+                        <p className="text-slate-300">
                           <span>{formatDateTimeID(b.startAt)}</span>
                         </p>
-                        <p className="text-slate-400 pl-4.5">s/d {formatDateTimeID(b.endAt)}</p>
-                        <p className="text-emerald-400 font-medium flex items-center space-x-1 mt-1">
-                          <MapPin className="w-3.5 h-3.5" />
+                        <p className="text-slate-400">s/d {formatDateTimeID(b.endAt)}</p>
+                        <p className="text-slate-300 mt-1">
                           <span>{r?.name}</span>
                         </p>
                       </div>
 
                       {/* Column 3: Tujuan & Keperluan */}
                       <div className="space-y-1">
-                        <span className="text-slate-400 font-semibold text-[11px]">Tujuan &amp; Keperluan:</span>
+                        <span className="text-slate-400 text-[11px]">Tujuan &amp; Keperluan:</span>
                         <p className="text-white font-medium">{b.destination}</p>
-                        <p className="text-slate-300 italic text-[11px] leading-relaxed">
+                        <p className="text-slate-400 italic text-[11px] leading-relaxed">
                           "{b.purpose}"
                         </p>
                       </div>
                     </div>
 
                     {/* Multi-Level Approval Status Bar */}
-                    <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div className="p-3 rounded-lg bg-slate-850 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2">
-                          <span className="font-bold text-slate-400">Level 1 (Atasan):</span>
+                          <span className="text-slate-400 text-[11px]">Level 1 (Atasan):</span>
                           <span
-                            className={`px-2 py-0.5 rounded font-bold text-[10px] ${
+                            className={`px-2 py-0.5 rounded text-[10px] font-medium ${
                               l1?.status === 'approved'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                                : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                ? 'bg-slate-800 text-slate-200 border border-slate-700'
+                                : 'bg-slate-800 text-slate-300 border border-slate-700'
                             }`}
                           >
                             {l1?.status.toUpperCase()} ({l1?.approverName.split(',')[0]})
@@ -325,14 +306,14 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
                         </div>
 
                         <div className="flex items-center space-x-2">
-                          <span className="font-bold text-slate-400">Level 2 (Pool/Logistik):</span>
+                          <span className="text-slate-400 text-[11px]">Level 2 (Pool):</span>
                           <span
-                            className={`px-2 py-0.5 rounded font-bold text-[10px] ${
+                            className={`px-2 py-0.5 rounded text-[10px] font-medium ${
                               l2?.status === 'approved'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-slate-800 text-slate-200 border border-slate-700'
                                 : l2?.status === 'pending'
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                : 'bg-slate-800 text-slate-400 border border-slate-700'
+                                ? 'bg-slate-800 text-slate-300 border border-slate-700'
+                                : 'bg-slate-850 text-slate-500 border border-slate-800'
                             }`}
                           >
                             {l2?.status.toUpperCase()} ({l2?.approverName.split(',')[0]})
@@ -344,22 +325,21 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => onViewBookingDetail(b)}
-                          className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700/80 text-xs transition-colors"
                         >
-                          Detail Lengkap
+                          Detail
                         </button>
                         <button
                           onClick={() => handleOpenActionModal(b, 'reject')}
-                          className="px-3 py-1.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 font-bold transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-rose-300 border border-slate-700 text-xs font-medium transition-colors"
                         >
                           Tolak
                         </button>
                         <button
                           onClick={() => handleOpenActionModal(b, 'approve')}
-                          className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-600/20 flex items-center space-x-1.5"
+                          className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-white border border-slate-700 text-xs font-medium transition-colors"
                         >
-                          <CheckCircle className="w-4 h-4" />
-                          <span>Setujui</span>
+                          Setujui
                         </button>
                       </div>
                     </div>
@@ -370,8 +350,7 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
               {/* Locked Level 2 Approvals List (waiting for L1) */}
               {lockedApprovals.length > 0 && (
                 <div className="mt-6 pt-4 border-t border-slate-800">
-                  <div className="flex items-center space-x-2 text-slate-400 text-xs font-semibold mb-3">
-                    <Lock className="w-4 h-4 text-amber-500" />
+                  <div className="text-slate-400 text-xs font-semibold mb-3">
                     <span>Pemesanan Menunggu Persetujuan Level 1 Terlebih Dahulu ({lockedApprovals.length})</span>
                   </div>
 
@@ -393,8 +372,7 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
                           </div>
 
                           <div className="flex items-center space-x-3 text-[11px]">
-                            <span className="text-amber-400/90 font-medium flex items-center space-x-1">
-                              <Lock className="w-3.5 h-3.5" />
+                            <span className="text-amber-400/90 font-medium">
                               <span>Menunggu {l1?.approverName} (L1)</span>
                             </span>
                             <button
@@ -490,18 +468,10 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
       {selectedBookingForAction && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-            <h3 className="text-base font-bold text-white flex items-center space-x-2">
-              {selectedBookingForAction.action === 'approve' ? (
-                <>
-                  <CheckCircle className="w-5 h-5 text-emerald-400" />
-                  <span>Konfirmasi Persetujuan Pemesanan</span>
-                </>
-              ) : (
-                <>
-                  <XCircle className="w-5 h-5 text-rose-400" />
-                  <span>Konfirmasi Penolakan Pemesanan</span>
-                </>
-              )}
+            <h3 className="text-base font-bold text-white">
+              {selectedBookingForAction.action === 'approve'
+                ? 'Konfirmasi Persetujuan Pemesanan'
+                : 'Konfirmasi Penolakan Pemesanan'}
             </h3>
 
             <div className="mt-3 p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs text-slate-300 space-y-1">
@@ -540,30 +510,30 @@ export const ApprovalsView: React.FC<ApprovalsViewProps> = ({
                     ? 'Misal: Disetujui, harap patuhi batas kecepatan pit tambang 40 km/jam.'
                     : 'Misal: Kebutuhan operasional belum mendesak / kendaraan dialihkan ke tim safety patrol.'
                 }
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-850 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500"
               />
             </div>
 
-            <div className="mt-5 flex items-center justify-end space-x-3">
+            <div className="mt-5 flex items-center justify-end space-x-2.5">
               <button
                 type="button"
                 onClick={() => setSelectedBookingForAction(null)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 text-xs font-medium"
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleConfirmAction}
-                className={`px-5 py-2 rounded-xl text-xs font-bold shadow-md transition-all ${
+                className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   selectedBookingForAction.action === 'approve'
-                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20'
-                    : 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/20'
+                    ? 'bg-slate-700 hover:bg-slate-600 text-white border border-slate-600'
+                    : 'bg-slate-800 hover:bg-slate-750 text-rose-300 border border-slate-700'
                 }`}
               >
                 {selectedBookingForAction.action === 'approve'
-                  ? 'Ya, Setujui Permohonan'
-                  : 'Tolak Permohonan'}
+                  ? 'Konfirmasi Persetujuan'
+                  : 'Konfirmasi Penolakan'}
               </button>
             </div>
           </div>

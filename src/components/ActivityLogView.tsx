@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import {
-  History,
-  Search,
-  Filter,
-  Shield,
-  Clock,
-  Laptop,
-  CheckCircle2,
-  FileCheck2,
-  Truck,
-  FileSpreadsheet
-} from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { ActivityLog } from '../types/index.ts';
 import { formatDateTimeID } from '../utils/rules.ts';
 
@@ -42,9 +31,8 @@ export const ActivityLogView: React.FC<ActivityLogViewProps> = ({ logs }) => {
     <div className="space-y-5">
       {/* Top Banner */}
       <div>
-        <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center space-x-2">
-          <History className="w-6 h-6 text-amber-500" />
-          <span>Audit Trail &amp; Log Aktivitas Sistem</span>
+        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          Audit Trail &amp; Log Aktivitas Sistem
         </h1>
         <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
           Pencatatan real-time setiap aksi pemesanan, persetujuan bertingkat, monitoring BBM, dan ekspor laporan
@@ -52,15 +40,15 @@ export const ActivityLogView: React.FC<ActivityLogViewProps> = ({ logs }) => {
       </div>
 
       {/* Filter and Search */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-3">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 flex flex-col sm:flex-row gap-2.5">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari user, aksi, deskripsi log, atau IP..."
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+            className="w-full bg-slate-850 border border-slate-700/80 rounded-lg pl-9 pr-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500"
           />
         </div>
 
@@ -68,7 +56,7 @@ export const ActivityLogView: React.FC<ActivityLogViewProps> = ({ logs }) => {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+            className="w-full bg-slate-850 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-slate-500"
           >
             <option value="all">Semua Kategori Aktivitas</option>
             <option value="booking">Pemesanan Kendaraan</option>
@@ -81,46 +69,42 @@ export const ActivityLogView: React.FC<ActivityLogViewProps> = ({ logs }) => {
       </div>
 
       {/* Log Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-800/80 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+            <thead className="bg-slate-850 text-slate-400 uppercase text-[10px] font-medium border-b border-slate-800">
               <tr>
-                <th className="py-3 px-4">Waktu (WITA/WIB)</th>
-                <th className="py-3 px-4">Pengguna &amp; Role</th>
-                <th className="py-3 px-4">Aksi Sistem</th>
-                <th className="py-3 px-4">Deskripsi Aktivitas</th>
-                <th className="py-3 px-4">Alamat IP</th>
+                <th className="py-2.5 px-3.5">Waktu</th>
+                <th className="py-2.5 px-3.5">Pengguna &amp; Role</th>
+                <th className="py-2.5 px-3.5">Aksi Sistem</th>
+                <th className="py-2.5 px-3.5">Deskripsi Aktivitas</th>
+                <th className="py-2.5 px-3.5">Alamat IP</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-300">
+            <tbody className="divide-y divide-slate-800/80 text-slate-300">
               {filteredLogs.map((log) => {
-                let badgeClass = 'bg-slate-800 text-slate-300';
-                if (log.category === 'approval') badgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-                else if (log.category === 'booking') badgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
-                else if (log.category === 'export') badgeClass = 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
-                else if (log.category === 'vehicle') badgeClass = 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
+                const badgeClass = 'bg-slate-800 text-slate-300 border border-slate-700';
 
                 return (
-                  <tr key={log.id} className="hover:bg-slate-800/40">
-                    <td className="py-3 px-4 whitespace-nowrap text-slate-400 font-mono text-[11px]">
+                  <tr key={log.id} className="hover:bg-slate-850/60 transition-colors">
+                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-400 font-mono text-[11px]">
                       {formatDateTimeID(log.timestamp)}
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-white">{log.userName}</div>
-                      <div className="text-[10px] text-slate-400 capitalize">
+                    <td className="py-2.5 px-3.5">
+                      <div className="font-medium text-slate-200">{log.userName}</div>
+                      <div className="text-[10px] text-slate-500 capitalize">
                         {log.role}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${badgeClass}`}>
+                    <td className="py-2.5 px-3.5">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-medium font-mono ${badgeClass}`}>
                         {log.action}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-200 leading-relaxed max-w-md">
+                    <td className="py-2.5 px-3.5 text-slate-300 leading-relaxed max-w-md">
                       {log.description}
                     </td>
-                    <td className="py-3 px-4 font-mono text-[11px] text-slate-400">
+                    <td className="py-2.5 px-3.5 font-mono text-[11px] text-slate-500">
                       {log.ipAddress}
                     </td>
                   </tr>
