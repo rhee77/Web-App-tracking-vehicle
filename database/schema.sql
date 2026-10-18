@@ -1,16 +1,9 @@
--- ========================================================
--- SISTEM PEMESANAN & MONITORING KENDARAAN TAMBANG NIKEL
--- Database Schema DDL for MySQL 8 / MariaDB
--- Conforms to plan.md §4 (Physical Data Model)
--- ========================================================
-
 CREATE DATABASE IF NOT EXISTS `vehicle_booking`
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE `vehicle_booking`;
 
--- 1. Tabel Wilayah Operasional (1 Head Office, 1 Branch, 6 Mines)
 CREATE TABLE IF NOT EXISTS `regions` (
     `id` VARCHAR(50) PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL,
@@ -20,7 +13,6 @@ CREATE TABLE IF NOT EXISTS `regions` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- 2. Tabel Pengguna (Admin & Approvers Level 1 & 2)
 CREATE TABLE IF NOT EXISTS `users` (
     `id` VARCHAR(50) PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL,
@@ -28,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `email` VARCHAR(150) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('admin', 'approver') NOT NULL,
-    `approval_level` TINYINT UNSIGNED NULL COMMENT '1: Atasan Langsung, 2: GM Pool/Logistik',
+    `approval_level` TINYINT UNSIGNED NULL,
     `region_id` VARCHAR(50) NULL,
     `position` VARCHAR(150) NOT NULL,
     `avatar` VARCHAR(10) NULL,
@@ -36,13 +28,12 @@ CREATE TABLE IF NOT EXISTS `users` (
     CONSTRAINT `fk_users_region` FOREIGN KEY (`region_id`) REFERENCES `regions`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- 3. Tabel Master Kendaraan (Angkutan Orang & Barang, Milik & Sewa)
 CREATE TABLE IF NOT EXISTS `vehicles` (
     `id` VARCHAR(50) PRIMARY KEY,
     `plate_number` VARCHAR(20) NOT NULL UNIQUE,
     `name` VARCHAR(150) NOT NULL,
     `model` VARCHAR(150) NOT NULL,
-    `category` ENUM('people', 'goods') NOT NULL COMMENT 'Orang vs Barang',
+    `category` ENUM('people', 'goods') NOT NULL,
     `ownership` ENUM('owned', 'rented') NOT NULL,
     `rental_company` VARCHAR(150) NULL,
     `region_id` VARCHAR(50) NOT NULL,
@@ -56,7 +47,6 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
     CONSTRAINT `fk_vehicles_region` FOREIGN KEY (`region_id`) REFERENCES `regions`(`id`)
 ) ENGINE=InnoDB;
 
--- 4. Tabel Driver / Pengemudi
 CREATE TABLE IF NOT EXISTS `drivers` (
     `id` VARCHAR(50) PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL,
@@ -70,7 +60,6 @@ CREATE TABLE IF NOT EXISTS `drivers` (
     CONSTRAINT `fk_drivers_region` FOREIGN KEY (`region_id`) REFERENCES `regions`(`id`)
 ) ENGINE=InnoDB;
 
--- 5. Tabel Pemesanan Kendaraan (Bookings)
 CREATE TABLE IF NOT EXISTS `bookings` (
     `id` VARCHAR(50) PRIMARY KEY,
     `code` VARCHAR(50) NOT NULL UNIQUE,
@@ -100,14 +89,13 @@ CREATE TABLE IF NOT EXISTS `bookings` (
     INDEX `idx_booking_status` (`status`)
 ) ENGINE=InnoDB;
 
--- 6. Tabel Persetujuan Berjenjang (Booking Approvals - Multi-Level)
 CREATE TABLE IF NOT EXISTS `booking_approvals` (
     `id` VARCHAR(50) PRIMARY KEY,
     `booking_id` VARCHAR(50) NOT NULL,
     `approver_id` VARCHAR(50) NOT NULL,
     `approver_name` VARCHAR(150) NOT NULL,
     `approver_position` VARCHAR(150) NOT NULL,
-    `level` TINYINT UNSIGNED NOT NULL COMMENT '1: Atasan Langsung, 2: Pool/Logistik',
+    `level` TINYINT UNSIGNED NOT NULL,
     `status` ENUM('waiting', 'pending', 'approved', 'rejected') NOT NULL DEFAULT 'waiting',
     `note` TEXT NULL,
     `acted_at` DATETIME NULL,
@@ -117,7 +105,6 @@ CREATE TABLE IF NOT EXISTS `booking_approvals` (
     INDEX `idx_approver_status` (`approver_id`, `status`)
 ) ENGINE=InnoDB;
 
--- 7. Tabel Monitoring Konsumsi BBM (Fuel Logs)
 CREATE TABLE IF NOT EXISTS `fuel_logs` (
     `id` VARCHAR(50) PRIMARY KEY,
     `vehicle_id` VARCHAR(50) NOT NULL,
@@ -132,7 +119,6 @@ CREATE TABLE IF NOT EXISTS `fuel_logs` (
     CONSTRAINT `fk_fuel_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- 8. Tabel Jadwal Servis & Pemeliharaan (Service Schedules)
 CREATE TABLE IF NOT EXISTS `service_schedules` (
     `id` VARCHAR(50) PRIMARY KEY,
     `vehicle_id` VARCHAR(50) NOT NULL,
@@ -146,7 +132,6 @@ CREATE TABLE IF NOT EXISTS `service_schedules` (
     CONSTRAINT `fk_service_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles`(`id`)
 ) ENGINE=InnoDB;
 
--- 9. Tabel Log Audit Aktivitas Aplikasi (Activity Logs)
 CREATE TABLE IF NOT EXISTS `activity_logs` (
     `id` VARCHAR(50) PRIMARY KEY,
     `user_id` VARCHAR(50) NULL,
