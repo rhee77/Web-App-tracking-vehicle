@@ -12,13 +12,19 @@ import {
 } from '../src/data/mockData.ts';
 
 async function seed() {
-  console.log('Connecting to MySQL database vehicle_booking...');
+  const host = process.env.DB_HOST || process.env.MYSQLHOST || '127.0.0.1';
+  const port = Number(process.env.DB_PORT || process.env.MYSQLPORT) || 3306;
+  const user = process.env.DB_USER || process.env.MYSQLUSER || 'root';
+  const password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '';
+  const database = process.env.DB_NAME || process.env.MYSQLDATABASE || 'vehicle_booking';
+
+  console.log(`Connecting to MySQL database ${database} at ${host}:${port}...`);
   const connection = await mysql.createConnection({
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'vehicle_booking',
+    host,
+    port,
+    user,
+    password,
+    database,
     multipleStatements: true
   });
 

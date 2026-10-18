@@ -1,9 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `vehicle_booking`
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
-
-USE `vehicle_booking`;
-
 CREATE TABLE IF NOT EXISTS `regions` (
     `id` VARCHAR(50) PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL,

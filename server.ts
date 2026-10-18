@@ -1,12 +1,30 @@
 import crypto from 'node:crypto';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import mysql from 'mysql2/promise';
+import path from 'node:path';
+import fs from 'node:fs';
 
 type Role = 'admin' | 'approver';
 type AuthUser = { id: string; name: string; username: string; email: string; role: Role; approvalLevel: 1 | 2 | null; position: string; regionId: string | null; avatar: string | null };
 const app = express();
 const sessions = new Map<string, AuthUser>();
-const pool = mysql.createPool({ host: process.env.DB_HOST || '127.0.0.1', port: Number(process.env.DB_PORT) || 3306, user: process.env.DB_USER || 'root', password: process.env.DB_PASSWORD || '', database: process.env.DB_NAME || 'vehicle_booking', waitForConnections: true, connectionLimit: 10 });
+
+const dbHost = process.env.DB_HOST || process.env.MYSQLHOST || '127.0.0.1';
+const dbPort = Number(process.env.DB_PORT || process.env.MYSQLPORT) || 3306;
+const dbUser = process.env.DB_USER || process.env.MYSQLUSER || 'root';
+const dbPassword = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '';
+const dbName = process.env.DB_NAME || process.env.MYSQLDATABASE || 'vehicle_booking';
+
+const pool = mysql.createPool({
+  host: dbHost,
+  port: dbPort,
+  user: dbUser,
+  password: dbPassword,
+  database: dbName,
+  waitForConnections: true,
+  connectionLimit: 10,
+  multipleStatements: true
+});
 app.use(express.json());
 
 const passwordHash = (password: string) => crypto.scryptSync(password, 'nikelfleet-demo-v1', 64).toString('hex');
@@ -85,4 +103,33 @@ app.post('/api/bookings/:id/complete', requireAuth, requireRole('admin'), async 
 
 app.post('/api/bookings/:id/cancel', requireAuth, requireRole('admin'), async (req, res) => { const user = res.locals.user as AuthUser; try { const [result]: any = await pool.query("UPDATE bookings SET status = 'cancelled', cancellation_reason = ? WHERE id = ? AND status = 'pending'", [req.body?.reason || 'Dibatalkan oleh Administrator', req.params.id]); if (!result.affectedRows) return res.status(409).json({ success: false, message: 'Hanya booking pending yang dapat dibatalkan.' }); await log(pool, user, 'CANCEL_BOOKING', 'booking', `Membatalkan pemesanan ${req.params.id}.`, req); res.json({ success: true }); } catch (err: any) { res.status(500).json({ success: false, message: err.message }); } });
 app.post('/api/activity-logs/export', requireAuth, requireRole('admin'), async (req, res) => { const user = res.locals.user as AuthUser; try { await log(pool, user, 'EXPORT_EXCEL', 'export', typeof req.body?.description === 'string' ? req.body.description.slice(0, 500) : 'Mengunduh laporan Excel.', req); res.json({ success: true }); } catch (err: any) { res.status(500).json({ success: false, message: err.message }); } });
-app.listen(Number(process.env.PORT) || 5000, () => console.log('Backend API Server running at http://localhost:5000'));
+
+async function initDb() {
+  try {
+    const [rows]: any = await pool.query("SHOW TABLES LIKE 'users'");
+    if (rows.length === 0) {
+      console.log('Database empty. Automatically initializing schema from database/schema.sql...');
+      const schemaPath = path.resolve(process.cwd(), 'database', 'schema.sql');
+      if (fs.existsSync(schemaPath)) {
+        const schemaSql = await fs.promises.readFile(schemaPath, 'utf-8');
+        await pool.query(schemaSql);
+        console.log('Database schema created successfully.');
+      }
+    }
+  } catch (err: any) {
+    console.warn('Database auto-initialization check skipped/failed:', err.message);
+  }
+}
+initDb();
+
+const distDir = path.resolve(process.cwd(), 'dist');
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.resolve(distDir, 'index.html'));
+  });
+}
+
+const PORT = Number(process.env.PORT) || 5000;
+app.listen(PORT, '0.0.0.0', () => console.log(`Application running at http://0.0.0.0:${PORT}`));
